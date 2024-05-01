@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// We want this to be a recursive implementation.
 #define _CJSON_LEXER_TOKEN_LCB      0x00
 #define _CJSON_LEXER_TOKEN_RCB      0x01
 #define _CJSON_LEXER_TOKEN_LSB      0x02
@@ -22,9 +21,6 @@ typedef struct _CJSON_LEXER_TOKEN
     const char* text;
     struct _CJSON_LEXER_TOKEN* next;
 } _CJSON_LEXER_TOKEN;
-
-#define _CJSON_SCOPE_STACK_CURLY    0x00
-#define _CJSON_SCOPE_STACK_SQUARE   0x01
 
 _CJSON_LEXER_TOKEN*     _CJSON_lexer_lex_tokens(const char* buf);
 void                    _CJSON_lexer_eat_whitespace(const char* buf, unsigned long* buf_pos);

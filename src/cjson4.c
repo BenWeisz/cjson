@@ -1,6 +1,4 @@
 #include "cjson4.h"
-#include <stdio.h>
-#include <string.h>
 
 // Convert the buf string to a list of _CJSON_LEXER_TOKENs
 _CJSON_LEXER_TOKEN* _CJSON_lexer_lex_tokens(const char* buf)
@@ -32,81 +30,32 @@ _CJSON_LEXER_TOKEN* _CJSON_lexer_lex_tokens(const char* buf)
     curr_token->text = NULL;
     curr_token->next = NULL;
 
+    // Just to be pedantic :)
+    char control_tokens[7];
+    control_tokens[_CJSON_LEXER_TOKEN_LCB] = '{';
+    control_tokens[_CJSON_LEXER_TOKEN_RCB] = '}';
+    control_tokens[_CJSON_LEXER_TOKEN_LSB] = '[';
+    control_tokens[_CJSON_LEXER_TOKEN_RSB] = ']';
+    control_tokens[_CJSON_LEXER_TOKEN_COLON] = ':';
+    control_tokens[_CJSON_LEXER_TOKEN_COMMA] = ',';
+    control_tokens[6] = '\0';
+
     while (buf_token != '\0')
     {
-        if (buf_token == '{')
+        int control_token_i = 0;
+        char control_token = control_tokens[control_token_i];
+        while (control_token != '\0')
         {
-            curr_token->next = (_CJSON_LEXER_TOKEN*)malloc(sizeof(_CJSON_LEXER_TOKEN));
-            if (curr_token->next == NULL)
+            if (buf_token == control_token)
             {
-                printf("ERROR: Failed to allocate memory for CJSON lexer\n");
-                _CJSON_lexer_free_tokens(tokens);
-                return NULL;
+                break;
             }
-            curr_token = curr_token->next;
-            _CJSON_lexer_init_token(curr_token, _CJSON_LEXER_TOKEN_LCB, NULL);
+
+            control_token_i++;
+            control_token = control_tokens[control_token_i];
         }
-        else if (buf_token == '[')
-        {
-            curr_token->next = (_CJSON_LEXER_TOKEN*)malloc(sizeof(_CJSON_LEXER_TOKEN));
-            if (curr_token->next == NULL)
-            {
-                printf("ERROR: Failed to allocate memory for CJSON lexer\n");
-                _CJSON_lexer_free_tokens(tokens);
-                return NULL;
-            }
-            curr_token = curr_token->next;
-            _CJSON_lexer_init_token(curr_token, _CJSON_LEXER_TOKEN_LSB, NULL);
-        }
-        else if (buf_token == '}')
-        {
-            curr_token->next = (_CJSON_LEXER_TOKEN*)malloc(sizeof(_CJSON_LEXER_TOKEN));
-            if (curr_token->next == NULL)
-            {
-                printf("ERROR: Failed to allocate memory for CJSON lexer\n");
-                _CJSON_lexer_free_tokens(tokens);
-                return NULL;
-            }
-            curr_token = curr_token->next;
-            _CJSON_lexer_init_token(curr_token, _CJSON_LEXER_TOKEN_RCB, NULL);
-        }
-        else if (buf_token == ']')
-        {
-            curr_token->next = (_CJSON_LEXER_TOKEN*)malloc(sizeof(_CJSON_LEXER_TOKEN));
-            if (curr_token->next == NULL)
-            {
-                printf("ERROR: Failed to allocate memory for CJSON lexer\n");
-                _CJSON_lexer_free_tokens(tokens);
-                return NULL;
-            }
-            curr_token = curr_token->next;
-            _CJSON_lexer_init_token(curr_token, _CJSON_LEXER_TOKEN_RSB, NULL);
-        }
-        else if (buf_token == ':')
-        {
-            curr_token->next = (_CJSON_LEXER_TOKEN*)malloc(sizeof(_CJSON_LEXER_TOKEN));
-            if (curr_token->next == NULL)
-            {
-                printf("ERROR: Failed to allocate memory for CJSON lexer\n");
-                _CJSON_lexer_free_tokens(tokens);
-                return NULL;
-            }
-            curr_token = curr_token->next;
-            _CJSON_lexer_init_token(curr_token, _CJSON_LEXER_TOKEN_COLON, NULL);
-        }
-        else if (buf_token == ',')
-        {
-            curr_token->next = (_CJSON_LEXER_TOKEN*)malloc(sizeof(_CJSON_LEXER_TOKEN));
-            if (curr_token->next == NULL)
-            {
-                printf("ERROR: Failed to allocate memory for CJSON lexer\n");
-                _CJSON_lexer_free_tokens(tokens);
-                return NULL;
-            }
-            curr_token = curr_token->next;
-            _CJSON_lexer_init_token(curr_token, _CJSON_LEXER_TOKEN_COMMA, NULL);
-        }
-        else
+
+        if (control_token_i == _CJSON_LEXER_TOKEN_STR)
         {
             curr_token->next = (_CJSON_LEXER_TOKEN*)malloc(sizeof(_CJSON_LEXER_TOKEN));
             if (curr_token->next == NULL)
@@ -126,6 +75,17 @@ _CJSON_LEXER_TOKEN* _CJSON_lexer_lex_tokens(const char* buf)
             }
 
             _CJSON_lexer_init_token(curr_token, _CJSON_LEXER_TOKEN_STR, str_token);
+        }
+        else {
+            curr_token->next = (_CJSON_LEXER_TOKEN*)malloc(sizeof(_CJSON_LEXER_TOKEN));
+            if (curr_token->next == NULL)
+            {
+                printf("ERROR: Failed to allocate memory for CJSON lexer\n");
+                _CJSON_lexer_free_tokens(tokens);
+                return NULL;
+            }
+            curr_token = curr_token->next;
+            _CJSON_lexer_init_token(curr_token, control_token_i, NULL);
         }
 
         // Get the next non-whitespace character
