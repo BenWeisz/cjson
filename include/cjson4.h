@@ -28,8 +28,8 @@ const char*             _CJSON_lexer_eat_str(const char* buf, unsigned long* buf
 void                    _CJSON_lexer_free_tokens(_CJSON_LEXER_TOKEN* tokens);
 void                    _CJSON_lexer_init_token(_CJSON_LEXER_TOKEN* token, char type, const char* text);
 
-// _CJSON_lexer_verify();
-// _CJSON_lexer_verify_scopes();
+const int               _CJSON_lexer_verify(_CJSON_LEXER_TOKEN* tokens);
+const int               _CJSON_lexer_verify_scopes(_CJSON_LEXER_TOKEN* tokens);
 // _CJSON_lexer_verify_syntax();
 
 #endif // CJSON

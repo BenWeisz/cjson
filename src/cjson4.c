@@ -215,3 +215,46 @@ void _CJSON_lexer_init_token(_CJSON_LEXER_TOKEN* token, char type, const char* t
     token->text = text;
     token->next = NULL;
 }
+
+const int _CJSON_lexer_verify(_CJSON_LEXER_TOKEN* tokens)
+{
+    return 0;
+}
+
+// Verify that the structure of the lexed tokes is well formed
+const int _CJSON_lexer_verify_scopes(_CJSON_LEXER_TOKEN* tokens)
+{
+    char scope_stack[1024 * 1024];
+    int scope_stack_head = 0;
+
+    _CJSON_LEXER_TOKEN* curr_token = tokens;
+    while (curr_token != NULL)
+    {
+        if (curr_token->type == _CJSON_LEXER_TOKEN_LCB)
+        {
+            scope_stack[scope_stack_head++] = _CJSON_LEXER_TOKEN_LCB;
+        }
+        else if (curr_token->type == _CJSON_LEXER_TOKEN_LSB)
+        {
+            scope_stack[scope_stack_head++] = _CJSON_LEXER_TOKEN_LSB;
+        }
+        else if (curr_token->type == _CJSON_LEXER_TOKEN_RCB)
+        {
+            if (scope_stack_head == 0 || scope_stack[scope_stack_head - 1] != _CJSON_LEXER_TOKEN_LCB)
+                return 0;
+            scope_stack_head--;
+        }
+        else if (curr_token->type == _CJSON_LEXER_TOKEN_RSB)
+        {
+            if (scope_stack_head == 0 || scope_stack[scope_stack_head - 1] != _CJSON_LEXER_TOKEN_LSB)
+                return 0;
+            scope_stack_head--;
+        }
+        curr_token = curr_token->next;
+    }
+
+    if (scope_stack_head != 0)
+        return 0;
+
+    return 1;
+}
