@@ -2,11 +2,11 @@
 
 int main()
 {
-    const char* json = "{ \"numbers\": [1,2,3,4\t,5\t\t\t\t\n,6]\t\t\t\n      }";
-    const char* bad_json = "{ \"asdf\": 1\t\t\t\t\t\n]";
-    _CJSON_LEXER_TOKEN* tokens = _CJSON_lexer_lex_tokens(bad_json);
+    const char* json = "{ \"numbers\": [6.0   \t\t\t\t\n, true, false, null, \"strstr\"]\t\t\t\n      }";
+    // const char* bad_json = "{ \"asdf\": 1\t\t\t\t\t\n]";
+    _CJSON_LEXER_TOKEN* tokens = _CJSON_lexer_lex_tokens(json);
 
-    const int status = _CJSON_lexer_verify_scopes(tokens);
+    const int status = _CJSON_lexer_verify(tokens);
     printf("%d\n", status);
 
     return 0;

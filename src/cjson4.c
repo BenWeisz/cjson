@@ -30,7 +30,7 @@ _CJSON_LEXER_TOKEN* _CJSON_lexer_lex_tokens(const char* buf)
     curr_token->text = NULL;
     curr_token->next = NULL;
 
-    // Just to be pedantic :)
+    // Just to be pedantic :) instead of using a string literal
     char control_tokens[7];
     control_tokens[_CJSON_LEXER_TOKEN_LCB] = '{';
     control_tokens[_CJSON_LEXER_TOKEN_RCB] = '}';
@@ -107,8 +107,8 @@ void _CJSON_lexer_eat_whitespace(const char* buf, unsigned long* buf_pos)
     {
         if (buf_token != ' ' &&
             buf_token != '\t' &&
-            buf_token != 0x0A &&
-            buf_token != 0x0D) return;
+            buf_token != '\r' &&
+            buf_token != '\n') return;
 
         *buf_pos += 1;
         buf_token = buf[*buf_pos];
@@ -209,6 +209,7 @@ void _CJSON_lexer_free_tokens(_CJSON_LEXER_TOKEN* tokens)
     }
 }
 
+// Init a single token
 void _CJSON_lexer_init_token(_CJSON_LEXER_TOKEN* token, char type, const char* text)
 {
     token->type = type;
@@ -216,9 +217,14 @@ void _CJSON_lexer_init_token(_CJSON_LEXER_TOKEN* token, char type, const char* t
     token->next = NULL;
 }
 
+// Run scope verification followed by literal verification and lexer token augmentation
+// Scope verification: makes sure that the structual tokens represent a well formed json object
+// Literal verification: makes sure that all string literals map to a valid json literal type
 const int _CJSON_lexer_verify(_CJSON_LEXER_TOKEN* tokens)
 {
-    return 0;
+    const int scope_verification_status = _CJSON_lexer_verify_scopes(tokens);
+    const int literal_verification_status = _CJSON_lexer_verify_and_augment_literals(tokens);
+    return scope_verification_status && literal_verification_status;
 }
 
 // Verify that the structure of the lexed tokes is well formed
@@ -257,4 +263,303 @@ const int _CJSON_lexer_verify_scopes(_CJSON_LEXER_TOKEN* tokens)
         return 0;
 
     return 1;
+}
+
+// Verify that string literals map to valid literals in json and augments 
+// literal lexer tokens with information about their type.
+const int _CJSON_lexer_verify_and_augment_literals(_CJSON_LEXER_TOKEN* tokens)
+{
+    _CJSON_LEXER_TOKEN* curr_token = tokens;
+    while (curr_token != NULL)
+    {
+        if (curr_token->type == _CJSON_LEXER_TOKEN_STR)
+        {
+            if (strncmp(curr_token->text, "false", 4) == 0)
+            {
+                curr_token->type = _CJSON_LEXER_TOKEN_STR_FALSE;
+            }
+            else if (strncmp(curr_token->text, "true", 4) == 0)
+            {
+                curr_token->type = _CJSON_LEXER_TOKEN_STR_TRUE;
+            }
+            else if (strncmp(curr_token->text, "null", 4) == 0)
+            {
+                curr_token->type = _CJSON_LEXER_TOKEN_STR_NULL;
+            }
+            else 
+            {
+                char starting_char = curr_token->text[0];
+                if (starting_char == '"')
+                {
+                    const int status = _CJSON_lexer_verify_is_string(curr_token);
+                    if (status != 1)
+                    {
+                        return 0;
+                    }
+                    curr_token->type = _CJSON_LEXER_TOKEN_STR_STR;
+                }
+                else if (starting_char == '-' || (starting_char >= '0' && starting_char <= '9'))
+                {
+                    const int status = _CJSON_lexer_verify_is_num(curr_token);
+                    if (status != 1)
+                    {
+                        return 0;
+                    }
+
+                    if (_CJSON_lexer_verify_is_float(curr_token) == 0)
+                    {
+                        curr_token->type = _CJSON_LEXER_TOKEN_STR_INT;
+                    }
+                    else 
+                    {
+                        curr_token->type = _CJSON_LEXER_TOKEN_STR_FLOAT;
+                    }
+                }
+                else 
+                {
+                    return 0;
+                }
+            }
+        }
+            
+        curr_token = curr_token->next;
+    }
+
+    return 1;
+}
+
+// Verify that a string literal represents a json string literal
+const int _CJSON_lexer_verify_is_string(_CJSON_LEXER_TOKEN* token)
+{
+    unsigned long curr_char_i = 0;
+    char curr_char = token->text[curr_char_i++];
+    if (curr_char != '"')
+        return 0;
+
+    curr_char = token->text[curr_char_i++];
+    char state = _CJSON_STR_STATE_START;
+    while (curr_char != '\0')
+    {
+        if (state == _CJSON_STR_STATE_START)
+        {
+            if (curr_char == '\\')
+            {
+                state = _CJSON_STR_STATE_CTRL;
+            }
+            else if (curr_char == '"')
+            {
+                return 1;
+            }
+            else {
+                state = _CJSON_STR_STATE_PLAIN;
+            }
+        }
+        else if (state == _CJSON_STR_STATE_PLAIN)
+        {
+            if (curr_char == '\\')
+            {
+                state = _CJSON_STR_STATE_CTRL;
+            }
+            else if (curr_char == '"')
+            {
+                return 1;
+            }
+            // If you're alread in the PLAIN state, you remain in the PLAIN state
+        }
+        else if (state == _CJSON_STR_STATE_CTRL)
+        {
+            if (curr_char != '"' && 
+                curr_char != '\\' && 
+                curr_char != '/' && 
+                curr_char != 'b' &&
+                curr_char != 'f' &&
+                curr_char != 'n' && 
+                curr_char != 'r' &&
+                curr_char != 't')
+            {
+                return 0;
+            }
+            state = _CJSON_STR_STATE_PLAIN;
+        }
+        else
+        {
+            return 0;
+        }
+        curr_char = token->text[curr_char_i++];
+    }
+
+    return 0;
+}
+
+// Verify that a string literal represents a json numerical type
+const int _CJSON_lexer_verify_is_num(_CJSON_LEXER_TOKEN* token)
+{
+    unsigned long curr_char_i = 0;
+    char curr_char = token->text[curr_char_i++];
+    
+    char state;
+    if (curr_char == '-')
+    {
+        state = _CJSON_NUM_STATE_SIGN;
+    }
+    else if (curr_char == '0')
+    {
+        state = _CJSON_NUM_STATE_START_ZERO;
+    }
+    else if (curr_char >= '0' && curr_char <= '9')
+    {
+        state = _CJSON_NUM_STATE_START_WHOLE;
+    }
+    else
+    {
+        return 0;
+    }
+    curr_char = token->text[curr_char_i++];
+
+    while (curr_char != '\0')
+    {
+        if (state == _CJSON_NUM_STATE_SIGN)
+        {
+            if (curr_char == '0')
+            {
+                state = _CJSON_NUM_STATE_START_ZERO;
+            }
+            else if (curr_char >= '1' && curr_char <= '9')
+            {
+                state = _CJSON_NUM_STATE_START_WHOLE;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_NUM_STATE_START_ZERO) 
+        {
+            if (curr_char == '.')
+            {
+                state = _CJSON_NUM_STATE_POINT;
+            }
+            else if (curr_char == 'e' || curr_char == 'E')
+            {
+                state = _CJSON_NUM_STATE_EXP_E;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_NUM_STATE_START_WHOLE) 
+        {
+            if (curr_char >= '0' && curr_char <= '9')
+            {
+                state = _CJSON_NUM_STATE_START_WHOLE_CONT;
+            }
+            else if (curr_char == '.')
+            {
+                state = _CJSON_NUM_STATE_POINT;
+            }
+            else if (curr_char == 'e' || curr_char == 'E')
+            {
+                state = _CJSON_NUM_STATE_EXP_E;
+            }
+            else 
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_NUM_STATE_START_WHOLE_CONT) 
+        {
+            if (curr_char == '.')
+            {
+                state = _CJSON_NUM_STATE_POINT;
+            }
+            else if (curr_char == 'e' || curr_char == 'E')
+            {
+                state = _CJSON_NUM_STATE_EXP_E;
+            }
+            else if (curr_char < '0' || curr_char > '9')
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_NUM_STATE_POINT) 
+        {
+            if (curr_char >= '0' && curr_char <= '9')
+            {
+                state = _CJSON_NUM_STATE_MANTISSA;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_NUM_STATE_MANTISSA) 
+        {
+            if (curr_char == 'e' || curr_char == 'E')
+            {
+                state = _CJSON_NUM_STATE_EXP_E;
+            }
+            else if (curr_char < '0' || curr_char > '9')
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_NUM_STATE_EXP_E) 
+        {
+            if (curr_char == '-' || curr_char == '+')
+            {
+                state = _CJSON_NUM_STATE_EXP_SIGN;
+            }
+            else if (curr_char >= '0' && curr_char <= '9')
+            {
+                state = _CJSON_NUM_STATE_EXP_MAG;
+            }
+            else {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_NUM_STATE_EXP_SIGN) 
+        {
+            if (curr_char >= '0' && curr_char <= '9')
+            {
+                state = _CJSON_NUM_STATE_EXP_MAG;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_NUM_STATE_EXP_MAG) 
+        {
+            if (curr_char < '0' || curr_char > '9')
+            {
+                return 0;
+            }
+        }
+        else 
+        {
+            return 0;
+        }
+        curr_char = token->text[curr_char_i++];
+    }
+
+    return 1;
+}
+
+// Verify that a string literal is a float literal type in json
+const int _CJSON_lexer_verify_is_float(_CJSON_LEXER_TOKEN* token)
+{
+    unsigned long curr_char_i = 0;
+    char curr_char = token->text[curr_char_i++];
+
+    while (curr_char != '\0')
+    {
+        if (curr_char == '.')
+        {
+            return 1;
+        }
+        curr_char = token->text[curr_char_i++];
+    }
+
+    return 0;
 }
