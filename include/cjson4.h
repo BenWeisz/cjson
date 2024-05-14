@@ -50,11 +50,36 @@ void                    _CJSON_lexer_init_token(_CJSON_LEXER_TOKEN* token, char 
 #define _CJSON_NUM_STATE_EXP_SIGN           0x07
 #define _CJSON_NUM_STATE_EXP_MAG            0x08
 
-const int               _CJSON_lexer_verify(_CJSON_LEXER_TOKEN* tokens);
+const int               _CJSON_lexer_verify_and_augment_tokens(_CJSON_LEXER_TOKEN* tokens);
 const int               _CJSON_lexer_verify_scopes(_CJSON_LEXER_TOKEN* tokens);
 const int               _CJSON_lexer_verify_and_augment_literals(_CJSON_LEXER_TOKEN* tokens);
 const int               _CJSON_lexer_verify_is_string(_CJSON_LEXER_TOKEN* token);
 const int               _CJSON_lexer_verify_is_num(_CJSON_LEXER_TOKEN* token);
 const int               _CJSON_lexer_verify_is_float(_CJSON_LEXER_TOKEN* token);
+const int               _CJSON_lexer_verify_value_structure(_CJSON_LEXER_TOKEN** tokens);
+
+#define _CJSON_VALUE_STATE_START_OBJ              0x00
+#define _CJSON_VALUE_STATE_START_ARR              0x01
+#define _CJSON_VALUE_STATE_KEY                    0x02
+#define _CJSON_VALUE_STATE_COLON                  0x03
+#define _CJSON_VALUE_STATE_VALUE                  0x04
+#define _CJSON_VALUE_STATE_COMMA                  0x05
+
+// typedef struct CJSON_NODE
+// {
+//     char type;
+//     char** keys;
+//     struct CJSON_NODE* values;
+//     unsigned int num_values;
+//     union {
+//         char* s_value;
+//         double f_value;
+//         long i_value;
+//         char t_value;
+//     };
+// } CJSON_NODE;
+
+// CJSON_NODE*              CJSON_parse_json(const char* buf);
+// CJSON_NODE*              _CJSON_parse_lexer_tokens(const _CJSON_LEXER_TOKEN* tokens);
 
 #endif // CJSON

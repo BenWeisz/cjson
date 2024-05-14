@@ -220,11 +220,14 @@ void _CJSON_lexer_init_token(_CJSON_LEXER_TOKEN* token, char type, const char* t
 // Run scope verification followed by literal verification and lexer token augmentation
 // Scope verification: makes sure that the structual tokens represent a well formed json object
 // Literal verification: makes sure that all string literals map to a valid json literal type
-const int _CJSON_lexer_verify(_CJSON_LEXER_TOKEN* tokens)
+const int _CJSON_lexer_verify_and_augment_tokens(_CJSON_LEXER_TOKEN* tokens)
 {
     const int scope_verification_status = _CJSON_lexer_verify_scopes(tokens);
     const int literal_verification_status = _CJSON_lexer_verify_and_augment_literals(tokens);
-    return scope_verification_status && literal_verification_status;
+
+    _CJSON_LEXER_TOKEN* curr_token = tokens;
+    const int value_structure_verification = _CJSON_lexer_verify_value_structure(&curr_token);
+    return scope_verification_status && literal_verification_status && value_structure_verification;
 }
 
 // Verify that the structure of the lexed tokes is well formed
@@ -563,3 +566,156 @@ const int _CJSON_lexer_verify_is_float(_CJSON_LEXER_TOKEN* token)
 
     return 0;
 }
+
+// Ensure that objects are made up of (str_str, colon, x, comma) 4-tuples, and that the last tuple doesn't have a comma
+// Ensure that arrays are made up of (x, comma) tuples, and that the last tuple doesn't have a comma
+const int _CJSON_lexer_verify_value_structure(_CJSON_LEXER_TOKEN** tokens)
+{
+    _CJSON_LEXER_TOKEN* curr_token = *tokens;
+    if (curr_token->type >= _CJSON_LEXER_TOKEN_STR_STR)
+        return 1;
+
+    char is_obj = 0;
+
+    char state;
+    if (curr_token->type == _CJSON_LEXER_TOKEN_LCB)
+    {
+        state = _CJSON_VALUE_STATE_START_OBJ;
+        is_obj = 1;
+    }
+    else if (curr_token->type == _CJSON_LEXER_TOKEN_LSB)
+    {
+        state = _CJSON_VALUE_STATE_START_ARR;
+        is_obj = 0;
+    }
+    else 
+        return 0;
+
+    // Skip the {, or [ token
+    curr_token = curr_token->next;
+    while (curr_token != NULL)
+    {
+        if (state == _CJSON_VALUE_STATE_START_OBJ)
+        {
+            if (curr_token->type == _CJSON_LEXER_TOKEN_RCB)
+            {
+                return 1;
+            }
+            else if (curr_token->type == _CJSON_LEXER_TOKEN_STR_STR)
+            {
+                state = _CJSON_VALUE_STATE_KEY;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_VALUE_STATE_START_ARR)
+        {
+            if (curr_token->type == _CJSON_LEXER_TOKEN_RSB)
+            {
+                return 1;
+            }
+            else if(curr_token->type >= _CJSON_LEXER_TOKEN_STR_STR || curr_token->type == _CJSON_LEXER_TOKEN_LCB || curr_token->type == _CJSON_LEXER_TOKEN_LSB)
+            {
+                const int status = _CJSON_lexer_verify_value_structure(&curr_token);
+                if (status != 1)
+                    return 0;
+                
+                state = _CJSON_VALUE_STATE_VALUE;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_VALUE_STATE_KEY)
+        {
+            if (curr_token->type == _CJSON_LEXER_TOKEN_COLON)
+            {
+                state = _CJSON_VALUE_STATE_COLON;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_VALUE_STATE_COLON)
+        {
+            if(curr_token->type >= _CJSON_LEXER_TOKEN_STR_STR || curr_token->type == _CJSON_LEXER_TOKEN_LCB || curr_token->type == _CJSON_LEXER_TOKEN_LSB)
+            {
+                const int status = _CJSON_lexer_verify_value_structure(&curr_token);
+                if (status != 1)
+                    return 0;
+                
+                state = _CJSON_VALUE_STATE_VALUE;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_VALUE_STATE_VALUE)
+        {
+            if (curr_token->type == _CJSON_LEXER_TOKEN_COMMA)
+            {
+                state = _CJSON_VALUE_STATE_COMMA;
+            }
+            else if (curr_token->type == _CJSON_LEXER_TOKEN_RCB && is_obj)
+            {
+                return 1;
+            }
+            else if (curr_token->type == _CJSON_LEXER_TOKEN_RSB && is_obj == 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (state == _CJSON_VALUE_STATE_COMMA)
+        {
+            if (curr_token->type == _CJSON_LEXER_TOKEN_STR_STR && is_obj)
+            {
+                state = _CJSON_VALUE_STATE_KEY;
+            }
+            else if (curr_token->type >= _CJSON_LEXER_TOKEN_STR_STR || curr_token->type == _CJSON_LEXER_TOKEN_LCB || curr_token->type == _CJSON_LEXER_TOKEN_LSB)
+            {
+                const int status = _CJSON_lexer_verify_value_structure(&curr_token);
+                if (status != 1)
+                    return 0;
+                
+                state = _CJSON_VALUE_STATE_VALUE;
+            }
+            else 
+            {
+                return 0;
+            }
+        }
+        curr_token = curr_token->next;
+        *tokens = curr_token;
+    }
+
+    return 0;
+}
+
+// CJSON_NODE* CJSON_parse_json(const char* buf)
+// {
+//     // Lex the buffer into its constituant tokens
+//     _CJSON_LEXER_TOKEN* tokens = _CJSON_lexer_lex_tokens(buf);
+//     if (tokens == NULL)
+//         return NULL;
+
+//     // Verify that the lexed tokens have a well formed structure and 
+//     const int status = _CJSON_lexer_verify_and_augment_tokens(tokens);
+//     if (status == 0)
+//         return NULL;
+
+//     return _CJSON_parse_lexer_tokens(tokens);
+// }
+
+// CJSON_NODE*              _CJSON_parse_lexer_tokens(const _CJSON_LEXER_TOKEN* tokens)
+// {
+
+// }
