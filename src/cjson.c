@@ -1,4 +1,4 @@
-#include "cjson4.h"
+#include "cjson.h"
 
 // Convert the buf string to a list of _CJSON_LEXER_TOKENs
 _CJSON_LEXER_TOKEN* _CJSON_lexer_lex_tokens(const char* buf)
