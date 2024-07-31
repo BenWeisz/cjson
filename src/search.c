@@ -87,7 +87,7 @@ struct CJSON_NODE* _CJSON_search( const struct CJSON* cjson, const long n, const
 			long parent_i = node_i;
 			long element_node_i = CJSON_search_find_first_with_parent( cjson, node_i  );
 			node_i = element_node_i + ind;
-			if ( node_i >= cjson->num_nodes )
+			if ( node_i >= cjson->num_nodes || node_i < 0 )
 			{
 				return NULL;
 			}
@@ -96,7 +96,11 @@ struct CJSON_NODE* _CJSON_search( const struct CJSON* cjson, const long n, const
 				return NULL;
 			}
 		}
+		else if ( node->type == CJSON_NODE_TYPE_KEY || node->type == CJSON_NODE_TYPE_VALUE )
+		{
+			return NULL;
+		}
 	}
-	
+
 	return &( nodes[ node_i ] );
 }

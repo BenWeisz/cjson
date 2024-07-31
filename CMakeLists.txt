@@ -16,3 +16,6 @@ target_compile_definitions( ${EXE_NAME} PUBLIC CJSON_RESOURCE_PATH="../" )
 if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
 	target_compile_definitions( ${EXE_NAME} PUBLIC -DCJSON_DEBUG )
 endif()
+
+add_executable( test test/test.c ${SOURCE_FILES} )
+target_include_directories( test PUBLIC include/ test/ )

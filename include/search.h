@@ -24,6 +24,6 @@ struct CJSON_NODE* _CJSON_search( const struct CJSON* cjson, const long n, const
 		r; \
 	 })
 
-#define CJSON_IS_NUM( x ) ( ( x )[ 0 ] >= '0' && ( x )[ 0 ] <= '9' )
+#define CJSON_IS_NUM( x ) ( ( ( x )[ 0 ] >= '0' && ( x )[ 0 ] <= '9' ) || ( x )[ 0 ] == '-' )
 
 #endif // CJSON_SEARCH_H
