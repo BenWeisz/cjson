@@ -7,7 +7,10 @@ set( CMAKE_C_STANDARD 99 )
 set( CMAKE_C_FLAGS "-Wall" )
 
 set( SOURCE_FILES src/io.c
-   				src/search.c )
+   				src/search.c
+				src/lexer.c
+				src/verify.c
+				src/parse.c)
 
 add_executable( ${EXE_NAME} main.c ${SOURCE_FILES} )
 target_include_directories( ${EXE_NAME} PUBLIC include/ )
