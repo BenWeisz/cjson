@@ -73,6 +73,11 @@ unsigned int _CJSON_get_key_value_tokens(
         }
     }
 
+    if ( scope_level != 0 )
+    {
+        return 0;
+    }
+
     *num_token_locations = curr_num_token_locations;
 
     return 1;
@@ -136,12 +141,16 @@ unsigned int _CJSON_get_value_tokens(
         }
     }
 
+    if ( scope_level != 0 )
+    {
+        return 0;
+    }
+
     *num_token_locations = curr_num_token_locations;
 
     return 1;
 }
 
-// NEED option to 1) skip scope verify, 2) stop parse from adding in \0 to denot value ends
 unsigned int _CJSON_parse(
     const char* buf,
     CJSON* cjson, 
@@ -199,7 +208,7 @@ unsigned int _CJSON_parse(
             key_node->type = CJSON_NODE_TYPE_KEY;
             key_node->buf = ( char* )&( buf[token->start + 1] );
             key_node->parent = obj_node_location;
-            key_locations[key_i * 2] = (*curr_num_nodes) - 1;
+            key_locations[key_i] = (*curr_num_nodes) - 1;
         }
 
         // Set the value nodes
@@ -238,8 +247,7 @@ unsigned int _CJSON_parse(
 
     return 1;
 }
-
-unsigned int CJSON_parse( char* buf, CJSON* cjson )
+unsigned int CJSON_parse_with_settings( char* buf, CJSON* cjson, const unsigned int settings )
 {
     // CJSON_LEXER_TOKEN_BUFFER_SIZE
     CJSON_TOKEN tokens[CJSON_LEXER_TOKEN_BUFFER_SIZE];
@@ -249,9 +257,12 @@ unsigned int CJSON_parse( char* buf, CJSON* cjson )
     unsigned int r = _CJSON_lexer_tokenize( buf, tokens, &num_tokens );
     if ( r == 0 ) return 0;
     
-    // Verify that the scope are logical
-    r = _CJSON_verify_scopes( tokens, num_tokens );
-    if ( r == 0 ) return 0;
+    if ( settings & CJSON_SCOPE_CHECKING )
+    {
+        // Verify that the scope are logical
+        r = _CJSON_verify_scopes( tokens, num_tokens );
+        if ( r == 0 ) return 0;
+    }
 
     // Parse the tokens
     unsigned int num_nodes = 0;
@@ -268,8 +279,16 @@ unsigned int CJSON_parse( char* buf, CJSON* cjson )
     if ( num_nodes > cjson->num_nodes ) return 0;
     cjson->num_nodes = num_nodes;
 
-    // Terminate the tokens in the buffer
-    _CJSON_lexer_termination_pass( buf, tokens, num_tokens );
+    if ( settings & CJSON_VALUE_TERMINATION )
+    {
+        // Terminate the tokens in the buffer
+        _CJSON_lexer_termination_pass( buf, tokens, num_tokens );
+    }
     
     return 1;
+}
+
+unsigned int CJSON_parse( char* buf, CJSON* cjson )
+{
+    return CJSON_parse_with_settings( buf, cjson, CJSON_SCOPE_CHECKING | CJSON_VALUE_TERMINATION );
 }

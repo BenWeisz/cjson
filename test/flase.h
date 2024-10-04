@@ -20,7 +20,7 @@
 			} \
 			else \
 			{ \
-				FLASE_PRINT( "FLASE Error Report: " #name " | "); \
+				FLASE_PRINT( "\nFLASE Error Report: " #name " | "); \
 				FLASE_PRINT( "\e[1;31mFAIL\e[0m [\e[1;31m%d/%d\e[0m]\n", flase_test_pn_##name, flase_test_an_##name ); \
 			} \
 		} while(0); \
@@ -31,7 +31,7 @@
 		do { \
 			if ( !( cond ) ) \
 			{ \
-				FLASE_PRINT( "\n\t\e[1;31mFailed:\e[0m %s, %s:%d\n", (msg), __FILE__, __LINE__ ); \
+				FLASE_PRINT( "\n\t\e[1;31mFailed:\e[0m %s, %s:%d", (msg), __FILE__, __LINE__ ); \
 			} \
 			else \
 			{ \

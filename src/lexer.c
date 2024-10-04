@@ -84,7 +84,6 @@ unsigned int _CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsign
                 // We should just live with the above code or add the option for the user to hook up their own memset (thats maybe vecotrized unlike gcc's implementation)
                 // But prenitializing can also be bad because the tokens array is just an estimate of the number of tokens we need
                 // If we guess wrong, then we are spending a bunch of time initializing tokens structs we will never use. Thus killing the advantages of vectorizing memset
-
             }
             else if ( _CJSON_lexer_is_whitespace( c ) == 0 )
             {
@@ -94,13 +93,20 @@ unsigned int _CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsign
                     token->type = CJSON_TOKEN_GET_TYPE( c );
                 }
             }
-            else if ( token->start != CJSON_TOKEN_SENTINEL ) token->end = pos;
+            else if ( token->start != CJSON_TOKEN_SENTINEL )
+            {
+                token->end = pos;
+                token = &( tokens[num_tokens_used++] );
+                token->start = CJSON_TOKEN_SENTINEL;
+                token->end = CJSON_TOKEN_SENTINEL; 
+                token->type = CJSON_TOKEN_UNK;
+            }
         }
 
         pos++;
     }
 
-    if ( num_tokens_used > *num_tokens )
+    if ( num_tokens_used >= *num_tokens )
     {
         CJSON_ERROR( "Ran out of tokens for use in the lexer! Please increase temp mem size macro.\n" );
         return 0;

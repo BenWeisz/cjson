@@ -31,5 +31,6 @@ unsigned int _CJSON_parse(
     const unsigned int token_pos );
 
 unsigned int CJSON_parse( char* buf, CJSON* cjson );
+unsigned int CJSON_parse_with_settings( char* buf, CJSON* cjson, const unsigned int settings );
 
 #endif // CJSON_PARSE_H
