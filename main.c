@@ -8,14 +8,16 @@
 #include "verify.h"
 #include "parse.h"
 
-#define TEMP_LEN 24
-
 int main() 
 {
-	// char* json_lit = "{\"apple\"\t\t\t\t:1,\"orange\": { \"tea\":\"green\", \"joe\": 2,}     , \"kiwi\": [1, 2, 3], }";
-	// char* json_lit = "{ \"apple\": { \"tea\": []}}";
-	// char* json_lit = "{ \"apple\": { \"tea\": [1, 2, -123223, 4, \"test\"]}}";
-	char* json_lit = "{ \"apple\": 1, \"pear\": \"gold\", }";
+	// char* json_lit = "{ \"oina\": [ { \"val1\": 1 }, { \"val2\": null }, {} ] }";
+	// char* json_lit = "{ \"one\": { \"v1\": 1 }, \"two\": { \"v2\": 2} }";
+	char* json_lit = "{ \"one\": [1, { \"apple\": [null, 1, 2, true, false, \"asdf\"]}, 3, 4, 5, 6, 7,]}";
+
+
+	// TODO: ADD RINBUFFER OVERWRITE PROTECTION!!!
+	// TODO: Implement searching from any cjson_node
+
 
 	char json[1024];
 	strcpy( json, json_lit );
@@ -25,13 +27,17 @@ int main()
 	cjson.nodes = nodes;
 	cjson.num_nodes = 1024;
 
-	unsigned int r = CJSON_parse( json, &cjson );
+	//////////////////////////////////////////////////////////////////////////////////////
+    // Lex the tokens
+	CJSON_parse( json, &cjson );
+	/////////////////////////////////////////////////////////////////////////////////////
 
-	// printf("%u\n", r);
-	CJSON_NODE* node = CJSON_search( &cjson, "pear" );
-	if ( node != NULL )
-		printf( "%s\n", node->buf );
-		// printf( "%d\n", atoi( node->buf ) );
+	// unsigned int r = CJSON_parse( json, &cjson );
+
+
+	// Need to ensure that we can search from any point in the nodes list
+	CJSON_NODE* node = CJSON_search( &cjson, "one", "1", "apple", "1" );
+	printf( "node buf: %s\n", node->buf );
 
 	return 0;
 }

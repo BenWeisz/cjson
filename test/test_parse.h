@@ -404,6 +404,74 @@ FLASE_DEFINE_TEST( parse__parse_array )
 	FLASE_ASSERT( cjson.nodes[3].parent == 2, "First array node's parent is array node" );
 
 	FLASE_ASSERT( cjson.nodes[4].type == CJSON_NODE_TYPE_VALUE, "Second array value exists" );
+	FLASE_ASSERT( cjson.nodes[4].buf[0] == '2', "Second array value is 2" );
+	FLASE_ASSERT( cjson.nodes[4].parent == 2, "Second array node's parent is array node" );
+
+	FLASE_ASSERT( cjson.nodes[5].type == CJSON_NODE_TYPE_VALUE, "Third array value exists" );
+	FLASE_ASSERT( cjson.nodes[5].buf[0] = '3', "Third array value is 3" );
+	FLASE_ASSERT( cjson.nodes[5].parent == 2, "Third array node's parent is array node" );
+
+	FLASE_ASSERT( cjson.nodes[6].type == CJSON_NODE_TYPE_VALUE, "Fourth array value exists" );
+	FLASE_ASSERT( cjson.nodes[6].buf[0] == '4', "Fourth array value is 4" );
+	FLASE_ASSERT( cjson.nodes[6].parent == 2, "Fourth array node's parent is array node" );
+
+	FLASE_ASSERT( cjson.nodes[7].type == CJSON_NODE_TYPE_VALUE, "Fifth array value exists" );
+	FLASE_ASSERT( cjson.nodes[7].buf[0] == '5', "Fifth array value is 5" );
+	FLASE_ASSERT( cjson.nodes[7].parent, "Fifth array node's parent is a array node" );
+}
+
+FLASE_DEFINE_TEST( parse__parse_object_in_array )
+{
+    char* json_lit = "{ \"oina\": [ { \"val1\": 1 }, { \"val2\": null }, {} ] }";
+	char json[1024];
+	strcpy( json, json_lit );
+
+	// Tokenize the json string
+    CJSON_TOKEN tokens[1024];
+    unsigned int num_tokens = 1024;
+    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    FLASE_ASSERT( r == 1, "Parsing test, lexer passes" );
+
+	// Setup the parsing nodes
+    CJSON_NODE nodes[1024];
+    CJSON cjson;
+    cjson.nodes = nodes;
+    cjson.num_nodes = 1024;
+
+    // Parse the tokens
+    unsigned int num_nodes = 0;
+    r = _CJSON_parse(
+        json,
+        &cjson,
+        &num_nodes,
+        -1,
+        tokens,
+        num_tokens,
+        0
+    );
+    
+	_CJSON_lexer_termination_pass( json, tokens, num_tokens );
+
+    FLASE_ASSERT( r == 1, "_parse success" );
+	FLASE_ASSERT( num_nodes == 10, "Correct number of nodes" );
+
+	FLASE_ASSERT( cjson.nodes[0].type == CJSON_NODE_TYPE_OBJ, "Root node exists" );
+	FLASE_ASSERT( cjson.nodes[0].buf[0] == '{', "Buf is open bracket at root node" );
+	FLASE_ASSERT( cjson.nodes[0].parent == -1, "This node is the root node" );
+
+	FLASE_ASSERT( cjson.nodes[1].type == CJSON_NODE_TYPE_KEY, "First key exists" );
+	FLASE_ASSERT( strcmp( cjson.nodes[1].buf, "oina" ) == 0, "Key is oina" );
+	FLASE_ASSERT( cjson.nodes[1].parent == 0, "The key node's parent is the root node" );
+
+	FLASE_ASSERT( cjson.nodes[2].type == CJSON_NODE_TYPE_ARR, "First value is an array" );
+	FLASE_ASSERT( cjson.nodes[2].buf[0] == '[', "Buf at first value is an array" );
+	FLASE_ASSERT( cjson.nodes[2].parent == 1, "First value's parent is a key" );
+
+	FLASE_ASSERT( cjson.nodes[3].type == CJSON_NODE_TYPE_OBJ, "First array index is an object" );
+	FLASE_ASSERT( cjson.nodes[3].buf[0] == '{', "Buf at first array value is object" );
+	FLASE_ASSERT( cjson.nodes[3].parent == 2, "Parent of first array element is array node" );
+
+	// FLASE_ASS
 }
 
 void test_parse_run_tests()
@@ -427,6 +495,7 @@ void test_parse_run_tests()
 
     FLASE_RUN_TEST( parse__parse_single_level_object );
     FLASE_RUN_TEST( parse__parse_array );
+    FLASE_RUN_TEST( parse__parse_object_in_array );
 }
 
 #endif // TEST_PARSE_H

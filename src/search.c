@@ -2,13 +2,13 @@
 
 /* Binary search for the first CJSON node with a parent value of <parent> */
 long CJSON_search_find_first_with_parent(
-	const struct CJSON* cjson,
+	const CJSON* cjson,
 	long parent )
 {
 	long low = parent;
 	long high = cjson->num_nodes - 1;
 
-	struct CJSON_NODE* nodes = cjson->nodes;
+	CJSON_NODE* nodes = cjson->nodes;
 	
 	while ( low <= high )
 	{
@@ -36,15 +36,15 @@ long CJSON_search_find_first_with_parent(
 	return -1;
 }
 
-struct CJSON_NODE* _CJSON_search( const struct CJSON* cjson, const long n, const char* keys[] )
+CJSON_NODE* _CJSON_search( const CJSON* cjson, const long n, const char* keys[] )
 {
 	long key_i = 0;
 	long node_i = 0;
-	struct CJSON_NODE* nodes = cjson->nodes;
+	CJSON_NODE* nodes = cjson->nodes;
 	while ( key_i < n )
 	{
 		const char* key = keys[ key_i++ ];
-		struct CJSON_NODE* node = &( nodes[ node_i ] );
+		CJSON_NODE* node = &( nodes[ node_i ] );
 
 		if ( node->type == CJSON_NODE_TYPE_OBJ )
 		{
@@ -55,7 +55,7 @@ struct CJSON_NODE* _CJSON_search( const struct CJSON* cjson, const long n, const
 				return NULL;
 			}
 			
-			struct CJSON_NODE* key_node = &( nodes[ key_node_i ] );
+			CJSON_NODE* key_node = &( nodes[ key_node_i ] );
 			while ( key_node->parent == parent_i )
 			{
 				if ( strncmp( key_node->buf, key, strlen( key ) ) == 0 )

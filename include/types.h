@@ -3,6 +3,8 @@
 
 #include "config.h"
 
+/* Lexer Types */
+
 #define CJSON_LEXER_STRING_STATE_OUT        0x00
 #define CJSON_LEXER_STRING_STATE_START      0x01
 #define CJSON_LEXER_STRING_STATE_IN         0x02
@@ -48,6 +50,8 @@ typedef struct CJSON_TOKEN
 	unsigned char type;
 } CJSON_TOKEN;
 
+/* Verify Types */
+
 #define CJSON_VERIFY_OBJ 0x00
 #define CJSON_VERIFY_ARR 0x01
 
@@ -55,6 +59,8 @@ typedef struct CJSON_TOKEN
 #define CJSON_NODE_TYPE_ARR     0x01
 #define CJSON_NODE_TYPE_KEY     0x02
 #define CJSON_NODE_TYPE_VALUE   0x03
+
+/* Parse Types */
 
 typedef struct CJSON_NODE
 {
@@ -69,12 +75,19 @@ typedef struct CJSON
 	int num_nodes;	
 } CJSON;
 
+
 #define CJSON_PARSE_KV_STATE_KEY 0x00
 #define CJSON_PARSE_KV_STATE_COL 0x01
 #define CJSON_PARSE_KV_STATE_VAL 0x02
 #define CJSON_PARSE_KV_STATE_COM 0x03
 
-#define CJSON_SCOPE_CHECKING 	 0x01
-#define CJSON_VALUE_TERMINATION  0x02
+typedef struct CJSON_PARSE_QUEUE_ELEMENT
+{
+	unsigned int token_location;
+	unsigned char token_key_flag;
+	int token_parent;
+} CJSON_PARSE_QUEUE_ELEMENT;
+
+#define CJSON_PARSE_SCOPE_CHECKING 	 0x01
 
 #endif // CJSON_TYPES_H
