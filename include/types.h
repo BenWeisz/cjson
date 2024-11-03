@@ -3,6 +3,8 @@
 
 #include "config.h"
 
+#define CJSON_NULL 0
+
 /* Lexer Types */
 
 #define CJSON_LEXER_STRING_STATE_OUT        0x00
@@ -67,19 +69,17 @@ typedef struct CJSON_NODE
 	unsigned char type;
 	char* buf;
 	int parent;
+	unsigned int i;
+	unsigned int rev_i; // Reverse index
 } CJSON_NODE;
-
-typedef struct CJSON
-{
-	struct CJSON_NODE* nodes;
-	int num_nodes;	
-} CJSON;
-
 
 #define CJSON_PARSE_KV_STATE_KEY 0x00
 #define CJSON_PARSE_KV_STATE_COL 0x01
 #define CJSON_PARSE_KV_STATE_VAL 0x02
 #define CJSON_PARSE_KV_STATE_COM 0x03
+
+#define CJSON_PARSE_QUEUE_OTHER_FLAG 	0x00
+#define CJSON_PARSE_QUEUE_KEY_FLAG 		0x01
 
 typedef struct CJSON_PARSE_QUEUE_ELEMENT
 {

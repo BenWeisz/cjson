@@ -143,10 +143,16 @@ unsigned int _CJSON_get_value_tokens(
     return 1;
 }
 
-#define CJSON_PARSE_QUEUE_OTHER_FLAG 0
-#define CJSON_PARSE_QUEUE_KEY_FLAG 1
+void _CJSON_parse_indexing_pass( CJSON_NODE* nodes, unsigned int num_nodes )
+{
+    for ( unsigned int node_i = 0; node_i < num_nodes; node_i++ )
+    {
+        nodes[node_i].i = node_i;
+        nodes[node_i].rev_i = num_nodes - 1 - node_i;
+    }
+}
 
-unsigned int _CJSON_parse( CJSON* cjson, CJSON_TOKEN* tokens, const unsigned int num_tokens, char* buf )
+unsigned int _CJSON_parse( CJSON_NODE* nodes, unsigned int* num_nodes, CJSON_TOKEN* tokens, const unsigned int num_tokens, char* buf )
 {
     // Setup parsing for managing the parsing order
     CJSON_PARSE_QUEUE_ELEMENT parse_queue[CJSON_PARSE_QUEUE_SIZE];
@@ -169,7 +175,7 @@ unsigned int _CJSON_parse( CJSON* cjson, CJSON_TOKEN* tokens, const unsigned int
     // Compute queue length (this is a demo)
     unsigned int token_queue_size = 1;
     unsigned int curr_node_i = 0;
-    while ( token_queue_size != 0 && curr_node_i < cjson->num_nodes )
+    while ( token_queue_size != 0 && curr_node_i < *num_nodes )
     {
         // Pop the top parsing element in the queue
         parse_element = &( parse_queue[parse_queue_front] );
@@ -199,9 +205,9 @@ unsigned int _CJSON_parse( CJSON* cjson, CJSON_TOKEN* tokens, const unsigned int
             }
 
             // Add an object node
-            cjson->nodes[curr_node_i].type = CJSON_NODE_TYPE_OBJ;
-            cjson->nodes[curr_node_i].buf = &( buf[token->start] );
-            cjson->nodes[curr_node_i].parent = parse_element->token_parent;
+            nodes[curr_node_i].type = CJSON_NODE_TYPE_OBJ;
+            nodes[curr_node_i].buf = &( buf[token->start] );
+            nodes[curr_node_i].parent = parse_element->token_parent;
         }
         else if ( token_type == CJSON_TOKEN_ARRS )
         {
@@ -223,9 +229,9 @@ unsigned int _CJSON_parse( CJSON* cjson, CJSON_TOKEN* tokens, const unsigned int
             }
 
             // Add an array node
-            cjson->nodes[curr_node_i].type = CJSON_NODE_TYPE_ARR;
-            cjson->nodes[curr_node_i].buf = &( buf[token->start] );
-            cjson->nodes[curr_node_i].parent = parse_element->token_parent;
+            nodes[curr_node_i].type = CJSON_NODE_TYPE_ARR;
+            nodes[curr_node_i].buf = &( buf[token->start] );
+            nodes[curr_node_i].parent = parse_element->token_parent;
         }
         else if ( token_type == CJSON_TOKEN_STR )
         {
@@ -237,21 +243,21 @@ unsigned int _CJSON_parse( CJSON* cjson, CJSON_TOKEN* tokens, const unsigned int
                 new_element->token_parent = curr_node_i;
                 parse_queue_back = ( parse_queue_back + 1 ) % CJSON_PARSE_QUEUE_SIZE;
     
-                cjson->nodes[curr_node_i].type = CJSON_NODE_TYPE_KEY;
+                nodes[curr_node_i].type = CJSON_NODE_TYPE_KEY;
             }
             else
             {
-                cjson->nodes[curr_node_i].type = CJSON_NODE_TYPE_VALUE;
+                nodes[curr_node_i].type = CJSON_NODE_TYPE_VALUE;
             }
             
-            cjson->nodes[curr_node_i].buf = &( buf[token->start + 1] );
-            cjson->nodes[curr_node_i].parent = parse_element->token_parent;
+            nodes[curr_node_i].buf = &( buf[token->start + 1] );
+            nodes[curr_node_i].parent = parse_element->token_parent;
         }
         else 
         {
-            cjson->nodes[curr_node_i].type = CJSON_NODE_TYPE_VALUE;
-            cjson->nodes[curr_node_i].buf = &( buf[token->start] );
-            cjson->nodes[curr_node_i].parent = parse_element->token_parent;
+            nodes[curr_node_i].type = CJSON_NODE_TYPE_VALUE;
+            nodes[curr_node_i].buf = &( buf[token->start] );
+            nodes[curr_node_i].parent = parse_element->token_parent;
         }
 
         // Compute the token_queue size
@@ -265,12 +271,12 @@ unsigned int _CJSON_parse( CJSON* cjson, CJSON_TOKEN* tokens, const unsigned int
     // Ran out of space for new nodes
     if ( token_queue_size != 0 ) return 0;
 
-    cjson->num_nodes = curr_node_i;
+    *num_nodes = curr_node_i;
 
     return 1;
 }
 
-unsigned int CJSON_parse_with_settings( char* buf, CJSON* cjson, const unsigned int settings )
+unsigned int CJSON_parse_with_settings( char* buf, CJSON_NODE* nodes, unsigned int* num_nodes, const unsigned int settings )
 {
     // CJSON_LEXER_TOKEN_BUFFER_SIZE
     CJSON_TOKEN tokens[CJSON_LEXER_TOKEN_BUFFER_SIZE];
@@ -288,8 +294,11 @@ unsigned int CJSON_parse_with_settings( char* buf, CJSON* cjson, const unsigned 
     }
 
     // Parse the tokens
-    r = _CJSON_parse( cjson, tokens, num_tokens, buf );
+    r = _CJSON_parse( nodes, num_nodes, tokens, num_tokens, buf );
     if ( r == 0 ) return 0;
+
+    // Populate the rev_i variable in each CJSON_NODE
+    _CJSON_parse_indexing_pass( nodes, *num_nodes );
 
     // Terminate the tokens in the buffer
     _CJSON_lexer_termination_pass( buf, tokens, num_tokens );
@@ -297,7 +306,7 @@ unsigned int CJSON_parse_with_settings( char* buf, CJSON* cjson, const unsigned 
     return 1;
 }
 
-unsigned int CJSON_parse( char* buf, CJSON* cjson )
+unsigned int CJSON_parse( char* buf, CJSON_NODE* nodes, unsigned int* num_nodes )
 {
-    return CJSON_parse_with_settings( buf, cjson, CJSON_PARSE_SCOPE_CHECKING );
+    return CJSON_parse_with_settings( buf, nodes, num_nodes, CJSON_PARSE_SCOPE_CHECKING );
 }

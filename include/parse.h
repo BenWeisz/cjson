@@ -21,13 +21,17 @@ unsigned int _CJSON_get_value_tokens(
     unsigned int* token_locations, 
     unsigned int* num_token_locations );
 
+/* Populate the rev_i parameter of all of the CJSON_NODE structs */
+void _CJSON_parse_indexing_pass( CJSON_NODE* nodes, unsigned int num_nodes );
+
 unsigned int _CJSON_parse( 
-    CJSON* cjson, 
+    CJSON_NODE* nodes,
+    unsigned int* num_nodes,
     CJSON_TOKEN* tokens, 
     const unsigned int num_tokens, 
     char* buf );
 
-unsigned int CJSON_parse_with_settings( char* buf, CJSON* cjson, const unsigned int settings );
-unsigned int CJSON_parse( char* buf, CJSON* cjson );
+unsigned int CJSON_parse_with_settings( char* buf, CJSON_NODE* nodes, unsigned int* num_nodes, const unsigned int settings );
+unsigned int CJSON_parse( char* buf, CJSON_NODE* nodes, unsigned int* num_nodes );
 
 #endif // CJSON_PARSE_H
