@@ -16,14 +16,14 @@ int main()
 
 
 	// TODO: ADD RINGBUFFER OVERWRITE PROTECTION!!!
-	// TODO: Implement searching from any cjson_node
 	// TODO: Remove _ from private functions to avoid issues with some compilers
 	// TODO: Add return types for success / errors
 	// TODO: Rename CJSON_VERIFY_OBJ to CJSON_VERIFY_OBJ_MARKER
 	// TODO: Search for all other TODOs
 	// TODO: Remove all STDLIB includes, swap nulls to CJSON_NULL and add custom implementation of STR functions
 
-	// TODO: 
+	// TODO: STD LIBS
+	// -	We want stdlibs to be one by default and logging errors to be on by default --> but can be turned off 
 
 	// To search from a node we need a couple of things:
 	// all nodes, current node, reference node
