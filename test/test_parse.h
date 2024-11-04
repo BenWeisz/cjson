@@ -6,7 +6,7 @@
 #include "parse.h"
 
 //////////////////////////////////////////////////////
-// _CJSON_get_key_value_tokens
+// CJSON_get_key_value_tokens
 //////////////////////////////////////////////////////
 FLASE_DEFINE_TEST( parse_get_key_value_tokens_bad_start )
 {
@@ -17,11 +17,11 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_bad_start )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Tokens must start with {" );
 }
 
@@ -34,11 +34,11 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_bad_double_comma )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Bad double comma" );
 }
 
@@ -51,11 +51,11 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_bad_comma_colon )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Bad comma and colon" );
 }
 
@@ -68,11 +68,11 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_bad_comma )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Bad comma" );
 }
 
@@ -85,11 +85,11 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_bad_value )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Get key value failure" );
 }
 
@@ -102,12 +102,12 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_bad_double_value )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
     FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
 
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    r = _CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    r = CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Get key value success" );
 }
 
@@ -120,12 +120,12 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_single_token )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
     FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
 
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    r = _CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    r = CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     
     FLASE_ASSERT( r == 1, "Get key value success" );
     FLASE_ASSERT( num_token_locations == 2, "Found singular token" );
@@ -142,12 +142,12 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_single_token_embedded )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
     FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
 
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    r = _CJSON_get_key_value_tokens( tokens, num_tokens, 3, token_locations, &num_token_locations );
+    r = CJSON_get_key_value_tokens( tokens, num_tokens, 3, token_locations, &num_token_locations );
     
     FLASE_ASSERT( r == 1, "Bad double value" );
     FLASE_ASSERT( num_token_locations == 2, "Found singular token" );
@@ -164,12 +164,12 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_multi_token )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
     FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
 
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    r = _CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    r = CJSON_get_key_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     
     FLASE_ASSERT( r == 1, "Get key value success" );
     FLASE_ASSERT( num_token_locations == 6, "Found multi tokens" );
@@ -182,7 +182,7 @@ FLASE_DEFINE_TEST( parse_get_key_value_tokens_multi_token )
 }
 
 //////////////////////////////////////////////////////
-// _CJSON_get_value_tokens
+// CJSON_get_value_tokens
 //////////////////////////////////////////////////////
 FLASE_DEFINE_TEST( parse_get_value_tokens_bad_start )
 {
@@ -193,11 +193,11 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_bad_start )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Tokens must start with [" );
 }
 
@@ -210,11 +210,11 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_bad_double_comma )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Bad double comma" );
 }
 
@@ -227,11 +227,11 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_bad_comma )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Bad comma" );
 }
 
@@ -244,11 +244,11 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_bad_brackets )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     FLASE_ASSERT( r == 0, "Bad brackets" );
 }
 
@@ -261,11 +261,11 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_single_token )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
 
     FLASE_ASSERT( r == 1, "Get value tokens succeeded" );
     FLASE_ASSERT( num_token_locations == 1, "Found only 1 token" );
@@ -281,11 +281,11 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_multi_token_embedded )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
     
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
-    unsigned int r = _CJSON_get_value_tokens( tokens, num_tokens, 6, token_locations, &num_token_locations );
+    unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 6, token_locations, &num_token_locations );
 
     FLASE_ASSERT( r == 1, "Get value tokens succeeded" );
     FLASE_ASSERT( num_token_locations == 5, "Found all 5 tokens" );
@@ -305,7 +305,7 @@ FLASE_DEFINE_TEST( parse__parse_single_level_object )
 	// Tokenize the json string
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
     FLASE_ASSERT( r == 1, "Parsing test, lexer passes" );
 
 	// Setup the parsing nodes
@@ -316,7 +316,7 @@ FLASE_DEFINE_TEST( parse__parse_single_level_object )
 
     // Parse the tokens
     unsigned int num_nodes = 0;
-    r = _CJSON_parse(
+    r = CJSON_parse(
         json,
         &cjson,
         &num_nodes,
@@ -326,7 +326,7 @@ FLASE_DEFINE_TEST( parse__parse_single_level_object )
         0
     );
     
-	_CJSON_lexer_termination_pass( json, tokens, num_tokens );
+	CJSON_lexer_termination_pass( json, tokens, num_tokens );
 
     FLASE_ASSERT( r == 1, "_parse success" );
 	FLASE_ASSERT( num_nodes == 5, "Correct number of nodes" );
@@ -361,7 +361,7 @@ FLASE_DEFINE_TEST( parse__parse_array )
 	// Tokenize the json string
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
     FLASE_ASSERT( r == 1, "Parsing test, lexer passes" );
 
 	// Setup the parsing nodes
@@ -372,7 +372,7 @@ FLASE_DEFINE_TEST( parse__parse_array )
 
     // Parse the tokens
     unsigned int num_nodes = 0;
-    r = _CJSON_parse(
+    r = CJSON_parse(
         json,
         &cjson,
         &num_nodes,
@@ -382,7 +382,7 @@ FLASE_DEFINE_TEST( parse__parse_array )
         0
     );
     
-	_CJSON_lexer_termination_pass( json, tokens, num_tokens );
+	CJSON_lexer_termination_pass( json, tokens, num_tokens );
 
     FLASE_ASSERT( r == 1, "_parse success" );
 	FLASE_ASSERT( num_nodes == 8, "Correct number of nodes" );
@@ -429,7 +429,7 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
 	// Tokenize the json string
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
     FLASE_ASSERT( r == 1, "Parsing test, lexer passes" );
 
 	// Setup the parsing nodes
@@ -440,7 +440,7 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
 
     // Parse the tokens
     unsigned int num_nodes = 0;
-    r = _CJSON_parse(
+    r = CJSON_parse(
         json,
         &cjson,
         &num_nodes,
@@ -450,7 +450,7 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
         0
     );
     
-	_CJSON_lexer_termination_pass( json, tokens, num_tokens );
+	CJSON_lexer_termination_pass( json, tokens, num_tokens );
 
     FLASE_ASSERT( r == 1, "_parse success" );
 	FLASE_ASSERT( num_nodes == 10, "Correct number of nodes" );

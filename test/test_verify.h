@@ -16,9 +16,9 @@ FLASE_DEFINE_TEST( verify_signal_good_scope )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
 
-    unsigned int r = _CJSON_verify_scopes( tokens, num_tokens );
+    unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
     FLASE_ASSERT( r == 1, "Valid scope" );
 }
 
@@ -31,8 +31,8 @@ FLASE_DEFINE_TEST( verify_signal_good_scope_lots_of_brackets )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    unsigned int r = _CJSON_verify_scopes( tokens, num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
     FLASE_ASSERT( r == 1, "Valid scope - many arrays" );
 }
 
@@ -45,8 +45,8 @@ FLASE_DEFINE_TEST( verify_signal_good_scope_simple )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    unsigned int r = _CJSON_verify_scopes( tokens, num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
     FLASE_ASSERT( r == 1, "Valid scope - simple" );
 }
 
@@ -59,8 +59,8 @@ FLASE_DEFINE_TEST( verify_signal_bad_scope_simple )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    unsigned int r = _CJSON_verify_scopes( tokens, num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
     FLASE_ASSERT( r == 0, "Invalid scope - simple" );
 }
 
@@ -73,8 +73,8 @@ FLASE_DEFINE_TEST( verify_signal_bad_scope )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    unsigned int r = _CJSON_verify_scopes( tokens, num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
     FLASE_ASSERT( r == 0, "Invalid scope " );
 }
 

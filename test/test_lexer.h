@@ -10,52 +10,52 @@
 
 FLASE_DEFINE_TEST( lexer_is_whitespace )
 {
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( ' ' ) == 1, "Space is whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( '\t' ) == 1, "Tab is whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( '\r' ) == 1, "\\r is whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( '\n' ) == 1, "\\n is whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( ' ' ) == 1, "Space is whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( '\t' ) == 1, "Tab is whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( '\r' ) == 1, "\\r is whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( '\n' ) == 1, "\\n is whitespace" );
 
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( '"' ) == 0, "\" is not whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( 't' ) == 0, "t is not whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( 'f' ) == 0, "f is not whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( 'n' ) == 0, "n is not whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( '{' ) == 0, "{ is not whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( '}' ) == 0, "} is not whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( '[' ) == 0, "[ is not whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( ']' ) == 0, "] is not whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( '-' ) == 0, "- is not whitespace" );
-    FLASE_ASSERT( _CJSON_lexer_is_whitespace( '0' ) == 0, "0 is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( '"' ) == 0, "\" is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( 't' ) == 0, "t is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( 'f' ) == 0, "f is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( 'n' ) == 0, "n is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( '{' ) == 0, "{ is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( '}' ) == 0, "} is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( '[' ) == 0, "[ is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( ']' ) == 0, "] is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( '-' ) == 0, "- is not whitespace" );
+    FLASE_ASSERT( CJSON_lexer_is_whitespace( '0' ) == 0, "0 is not whitespace" );
 }
 
 FLASE_DEFINE_TEST( lexer_next_string_state )
 {
     // Out state
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, ' ' ) == CJSON_LEXER_STRING_STATE_OUT, "Space doesn't change out state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '\t' ) == CJSON_LEXER_STRING_STATE_OUT, "Tab doesn't change out state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '\r' ) == CJSON_LEXER_STRING_STATE_OUT, "\r doesn't change out state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '\n' ) == CJSON_LEXER_STRING_STATE_OUT, "\n doesn't change out state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '"' ) == CJSON_LEXER_STRING_STATE_START, "\" leads to start state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '\\' ) == CJSON_LEXER_STRING_STATE_OUT, "\\ leads to out state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, ' ' ) == CJSON_LEXER_STRING_STATE_OUT, "Space doesn't change out state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '\t' ) == CJSON_LEXER_STRING_STATE_OUT, "Tab doesn't change out state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '\r' ) == CJSON_LEXER_STRING_STATE_OUT, "\r doesn't change out state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '\n' ) == CJSON_LEXER_STRING_STATE_OUT, "\n doesn't change out state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '"' ) == CJSON_LEXER_STRING_STATE_START, "\" leads to start state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_OUT, '\\' ) == CJSON_LEXER_STRING_STATE_OUT, "\\ leads to out state" );
 
     // Start state
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_START, '"' ) == CJSON_LEXER_STRING_STATE_END, "\" leads to end state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_START, ' ' ) == CJSON_LEXER_STRING_STATE_IN, "Space leads to in state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_START, '\t' ) == CJSON_LEXER_STRING_STATE_IN, "Tab leads to in state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_START, 'c' ) == CJSON_LEXER_STRING_STATE_IN, "Character leads to in state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_START, '"' ) == CJSON_LEXER_STRING_STATE_END, "\" leads to end state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_START, ' ' ) == CJSON_LEXER_STRING_STATE_IN, "Space leads to in state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_START, '\t' ) == CJSON_LEXER_STRING_STATE_IN, "Tab leads to in state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_START, 'c' ) == CJSON_LEXER_STRING_STATE_IN, "Character leads to in state" );
 
     // In state
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_IN, 'c' ) == CJSON_LEXER_STRING_STATE_IN, "Character leads to in state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_IN, '\\' ) == CJSON_LEXER_STRING_STATE_CTRL, "\\ leads to control state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_IN, '"' ) == CJSON_LEXER_STRING_STATE_END, "\" leads to end state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_IN, 'c' ) == CJSON_LEXER_STRING_STATE_IN, "Character leads to in state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_IN, '\\' ) == CJSON_LEXER_STRING_STATE_CTRL, "\\ leads to control state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_IN, '"' ) == CJSON_LEXER_STRING_STATE_END, "\" leads to end state" );
 
     // Control state
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_CTRL, '"' ) == CJSON_LEXER_STRING_STATE_IN, "\" leads to control state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_CTRL, '\\' ) == CJSON_LEXER_STRING_STATE_IN, "\\ leads to control state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_CTRL, 'c' ) == CJSON_LEXER_STRING_STATE_IN, "Character leads to in state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_CTRL, '"' ) == CJSON_LEXER_STRING_STATE_IN, "\" leads to control state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_CTRL, '\\' ) == CJSON_LEXER_STRING_STATE_IN, "\\ leads to control state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_CTRL, 'c' ) == CJSON_LEXER_STRING_STATE_IN, "Character leads to in state" );
 
     // End state
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_END, 'c' ) == CJSON_LEXER_STRING_STATE_OUT, "Character leads to out state" );
-    FLASE_ASSERT( _CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_END, '"' ) == CJSON_LEXER_STRING_STATE_START, "\" leads to start state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_END, 'c' ) == CJSON_LEXER_STRING_STATE_OUT, "Character leads to out state" );
+    FLASE_ASSERT( CJSON_lexer_next_string_state( CJSON_LEXER_STRING_STATE_END, '"' ) == CJSON_LEXER_STRING_STATE_START, "\" leads to start state" );
 }
 
 FLASE_DEFINE_TEST( lexer_tokenize_valid )
@@ -67,7 +67,7 @@ FLASE_DEFINE_TEST( lexer_tokenize_valid )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
 
     FLASE_ASSERT( r == 1, "Tokenizer passes" );
     FLASE_ASSERT( num_tokens == 19, "Tokenizer recorded correct number of tokens");
@@ -122,7 +122,7 @@ FLASE_DEFINE_TEST( lexer_tokenize_not_enough_tokens )
     CJSON_TOKEN tokens[10];
     unsigned int num_tokens = 10;
     
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
     FLASE_ASSERT( r == 0, "Tokenizer should fail because not enough tokens" );
 }
 
@@ -135,7 +135,7 @@ FLASE_DEFINE_TEST( lexer_double_value )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    unsigned int r = _CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
     FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
 
     FLASE_ASSERT( num_tokens == 6, "Correct number of tokens tokenized" );
@@ -150,8 +150,8 @@ FLASE_DEFINE_TEST( lexer_termination_pass )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     
-    _CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    _CJSON_lexer_termination_pass( json, tokens, num_tokens );
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_termination_pass( json, tokens, num_tokens );
     
     // Check that the value tokens are null terminated
     for ( unsigned int token_i = 0; token_i < num_tokens; token_i++ )

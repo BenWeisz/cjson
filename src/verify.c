@@ -1,6 +1,6 @@
 #include "../include/verify.h"
 
-unsigned int _CJSON_verify_scopes( CJSON_TOKEN* tokens, unsigned int num_tokens )
+unsigned int CJSON_verify_scopes( CJSON_TOKEN* tokens, unsigned int num_tokens )
 {
     unsigned int token_i = 0;
     CJSON_TOKEN* token = &( tokens[token_i++] );

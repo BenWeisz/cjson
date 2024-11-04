@@ -6,7 +6,7 @@
 #include "verify.h"
 
 /* Get the token indices where the key tokens are */
-unsigned int _CJSON_get_key_tokens(
+unsigned int CJSON_get_key_tokens(
     CJSON_TOKEN* tokens,
     const unsigned int num_tokens,
     const unsigned int token_pos, 
@@ -14,7 +14,7 @@ unsigned int _CJSON_get_key_tokens(
     unsigned int* num_token_locations );
 
 /* Get the token indicees of where the values are  */
-unsigned int _CJSON_get_value_tokens( 
+unsigned int CJSON_get_value_tokens( 
     CJSON_TOKEN* tokens,
     const unsigned int num_tokens,
     const unsigned int token_pos, 
@@ -22,9 +22,9 @@ unsigned int _CJSON_get_value_tokens(
     unsigned int* num_token_locations );
 
 /* Populate the rev_i parameter of all of the CJSON_NODE structs */
-void _CJSON_parse_indexing_pass( CJSON_NODE* nodes, unsigned int num_nodes );
+void CJSON_parse_indexing_pass( CJSON_NODE* nodes, unsigned int num_nodes );
 
-unsigned int _CJSON_parse( 
+unsigned int CJSON_parse_wrapper( 
     CJSON_NODE* nodes,
     unsigned int* num_nodes,
     CJSON_TOKEN* tokens, 

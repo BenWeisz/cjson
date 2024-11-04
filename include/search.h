@@ -13,7 +13,7 @@ long CJSON_search_find_first_with_parent(
 	long high,
 	long parent );
 
-CJSON_NODE* _CJSON_search( CJSON_NODE* nodes, const long n, const char* keys[] );
+CJSON_NODE* CJSON_search_wrapper( CJSON_NODE* nodes, const long n, const char* keys[] );
 
 // Credits: Tim Schaeffer: https://stackoverflow.com/questions/3272444/use-variadic-functions-in-c89-without-passing-number-of-arguments-or-a-final-arg 
 #define CJSON_search( nodes, ... ) \
@@ -21,7 +21,7 @@ CJSON_NODE* _CJSON_search( CJSON_NODE* nodes, const long n, const char* keys[] )
 		CJSON_NODE* r; \
 		do { \
 			const char* keys[] = { __VA_ARGS__ }; \
-			r = _CJSON_search( nodes, sizeof( keys ) / sizeof( const char* ), keys ); \
+			r = CJSON_search_wrapper( nodes, sizeof( keys ) / sizeof( const char* ), keys ); \
 		} while( 0 ); \
 		r; \
 	 })

@@ -33,7 +33,7 @@ long CJSON_search_find_first_with_parent(
 	return -1;
 }
 
-CJSON_NODE* _CJSON_search( CJSON_NODE* nodes, const long n, const char* keys[] )
+CJSON_NODE* CJSON_search_wrapper( CJSON_NODE* nodes, const long n, const char* keys[] )
 {
 	long key_i = 0;
 	long node_i = 0;

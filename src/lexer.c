@@ -1,11 +1,11 @@
 #include "../include/lexer.h"
 
-unsigned int _CJSON_lexer_is_whitespace( const char c )
+unsigned int CJSON_lexer_is_whitespace( const char c )
 {
     return c == '\t' || c == '\n' || c == '\r' || c == ' ';
 }
 
-unsigned char _CJSON_lexer_next_string_state( const unsigned char curr_state, const char c )
+unsigned char CJSON_lexer_next_string_state( const unsigned char curr_state, const char c )
 {
     if ( curr_state == CJSON_LEXER_STRING_STATE_OUT )
     {
@@ -33,7 +33,7 @@ unsigned char _CJSON_lexer_next_string_state( const unsigned char curr_state, co
     return CJSON_LEXER_STRING_STATE_UNK;
 }
 
-unsigned int _CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsigned int* num_tokens )
+unsigned int CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsigned int* num_tokens )
 {
     unsigned int pos = 0;
     unsigned int num_tokens_used = 0;
@@ -48,7 +48,7 @@ unsigned int _CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsign
     {
         // Advance the String State
         c = buf[pos];
-        string_state = _CJSON_lexer_next_string_state( string_state, c );
+        string_state = CJSON_lexer_next_string_state( string_state, c );
 
         if ( string_state == CJSON_LEXER_STRING_STATE_START )
         {
@@ -85,7 +85,7 @@ unsigned int _CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsign
                 // But prenitializing can also be bad because the tokens array is just an estimate of the number of tokens we need
                 // If we guess wrong, then we are spending a bunch of time initializing tokens structs we will never use. Thus killing the advantages of vectorizing memset
             }
-            else if ( _CJSON_lexer_is_whitespace( c ) == 0 )
+            else if ( CJSON_lexer_is_whitespace( c ) == 0 )
             {
                 if ( token->start == CJSON_TOKEN_SENTINEL )
                 {
@@ -116,7 +116,7 @@ unsigned int _CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsign
     return 1;
 }
 
-void _CJSON_lexer_termination_pass( char* buf, CJSON_TOKEN* tokens, unsigned int num_tokens )
+void CJSON_lexer_termination_pass( char* buf, CJSON_TOKEN* tokens, unsigned int num_tokens )
 {
     for ( unsigned int token_i = 0; token_i < num_tokens; token_i++ )
     {

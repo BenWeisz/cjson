@@ -1,6 +1,6 @@
 #include "../include/parse.h"
 
-unsigned int _CJSON_get_key_tokens(
+unsigned int CJSON_get_key_tokens(
     CJSON_TOKEN* tokens,
     const unsigned int num_tokens,
     const unsigned int token_pos, 
@@ -75,7 +75,7 @@ unsigned int _CJSON_get_key_tokens(
     return 1;
 }
 
-unsigned int _CJSON_get_value_tokens( 
+unsigned int CJSON_get_value_tokens( 
     CJSON_TOKEN* tokens,
     const unsigned int num_tokens,
     const unsigned int token_pos, 
@@ -143,7 +143,7 @@ unsigned int _CJSON_get_value_tokens(
     return 1;
 }
 
-void _CJSON_parse_indexing_pass( CJSON_NODE* nodes, unsigned int num_nodes )
+void CJSON_parse_indexing_pass( CJSON_NODE* nodes, unsigned int num_nodes )
 {
     for ( unsigned int node_i = 0; node_i < num_nodes; node_i++ )
     {
@@ -152,7 +152,7 @@ void _CJSON_parse_indexing_pass( CJSON_NODE* nodes, unsigned int num_nodes )
     }
 }
 
-unsigned int _CJSON_parse( CJSON_NODE* nodes, unsigned int* num_nodes, CJSON_TOKEN* tokens, const unsigned int num_tokens, char* buf )
+unsigned int CJSON_parse_wrapper( CJSON_NODE* nodes, unsigned int* num_nodes, CJSON_TOKEN* tokens, const unsigned int num_tokens, char* buf )
 {
     // Setup parsing for managing the parsing order
     CJSON_PARSE_QUEUE_ELEMENT parse_queue[CJSON_PARSE_QUEUE_SIZE];
@@ -190,7 +190,7 @@ unsigned int _CJSON_parse( CJSON_NODE* nodes, unsigned int* num_nodes, CJSON_TOK
             unsigned int token_locations[CJSON_PARSE_LEVEL_MAX_ELEMENTS];
             unsigned int num_token_locations = CJSON_PARSE_LEVEL_MAX_ELEMENTS;
 
-            unsigned int r = _CJSON_get_key_tokens(tokens, num_tokens, parse_element->token_location, token_locations, &num_token_locations);
+            unsigned int r = CJSON_get_key_tokens(tokens, num_tokens, parse_element->token_location, token_locations, &num_token_locations);
             if ( r == 0 ) return 0;
 
             unsigned int i = 0;
@@ -214,7 +214,7 @@ unsigned int _CJSON_parse( CJSON_NODE* nodes, unsigned int* num_nodes, CJSON_TOK
             unsigned int token_locations[CJSON_PARSE_LEVEL_MAX_ELEMENTS];
             unsigned int num_token_locations = CJSON_PARSE_LEVEL_MAX_ELEMENTS;
 
-            unsigned int r = _CJSON_get_value_tokens(tokens, num_tokens, parse_element->token_location, token_locations, &num_token_locations);
+            unsigned int r = CJSON_get_value_tokens(tokens, num_tokens, parse_element->token_location, token_locations, &num_token_locations);
             if ( r == 0 ) return 0;
 
             unsigned int i = 0;
@@ -283,25 +283,25 @@ unsigned int CJSON_parse_with_settings( char* buf, CJSON_NODE* nodes, unsigned i
 
     // Lex the tokens
     unsigned int num_tokens = CJSON_LEXER_TOKEN_BUFFER_SIZE;
-    unsigned int r = _CJSON_lexer_tokenize( buf, tokens, &num_tokens );
+    unsigned int r = CJSON_lexer_tokenize( buf, tokens, &num_tokens );
     if ( r == 0 ) return 0;
     
     if ( settings & CJSON_PARSE_SCOPE_CHECKING )
     {
         // Verify that the scope are logical
-        r = _CJSON_verify_scopes( tokens, num_tokens );
+        r = CJSON_verify_scopes( tokens, num_tokens );
         if ( r == 0 ) return 0;
     }
 
     // Parse the tokens
-    r = _CJSON_parse( nodes, num_nodes, tokens, num_tokens, buf );
+    r = CJSON_parse_wrapper( nodes, num_nodes, tokens, num_tokens, buf );
     if ( r == 0 ) return 0;
 
     // Populate the rev_i variable in each CJSON_NODE
-    _CJSON_parse_indexing_pass( nodes, *num_nodes );
+    CJSON_parse_indexing_pass( nodes, *num_nodes );
 
     // Terminate the tokens in the buffer
-    _CJSON_lexer_termination_pass( buf, tokens, num_tokens );
+    CJSON_lexer_termination_pass( buf, tokens, num_tokens );
     
     return 1;
 }
