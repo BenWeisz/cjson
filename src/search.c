@@ -47,7 +47,7 @@ CJSON_NODE* _CJSON_search( CJSON_NODE* nodes, const long n, const char* keys[] )
 			long key_node_i = CJSON_search_find_first_with_parent( nodes, node_i, nodes[0].rev_i + 1 - 1, node->i );
 			if ( key_node_i == -1 )
 			{
-				return CJSON_NULL;
+				return NULL;
 			}
 			
 			CJSON_NODE* key_node = &( nodes[ key_node_i ] );
@@ -60,7 +60,7 @@ CJSON_NODE* _CJSON_search( CJSON_NODE* nodes, const long n, const char* keys[] )
 			}
 			if ( key_node->parent != node->i )
 			{
-				return CJSON_NULL;
+				return NULL;
 			}
 
 			node_i = CJSON_search_find_first_with_parent( nodes, key_node_i, nodes[0].rev_i + 1 - 1, key_node->i );
@@ -69,26 +69,26 @@ CJSON_NODE* _CJSON_search( CJSON_NODE* nodes, const long n, const char* keys[] )
 		{
 			if ( !CJSON_IS_NUM( key ) )
 			{
-				return CJSON_NULL;
+				return NULL;
 			}
 
-			long ind = strtol( key, CJSON_NULL, 10 );
+			long ind = strtol( key, NULL, 10 );
 			long element_node_i = CJSON_search_find_first_with_parent( nodes, node_i, nodes[0].rev_i + 1 - 1, node->i );
 			node_i = element_node_i + ind;
 
 			 // nodes[0].rev_i + 1 is the pseudo length of nodes
 			if ( node_i >= nodes[0].rev_i + 1 || node_i < 0 )
 			{
-				return CJSON_NULL;
+				return NULL;
 			}
 			else if ( nodes[ node_i ].parent != node->i )
 			{
-				return CJSON_NULL;
+				return NULL;
 			}
 		}
 		else if ( node->type == CJSON_NODE_TYPE_KEY || node->type == CJSON_NODE_TYPE_VALUE )
 		{
-			return CJSON_NULL;
+			return NULL;
 		}
 	}
 

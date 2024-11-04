@@ -3,8 +3,6 @@
 
 #include "config.h"
 
-#define CJSON_NULL 0
-
 /* Lexer Types */
 
 #define CJSON_LEXER_STRING_STATE_OUT        0x00

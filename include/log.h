@@ -3,17 +3,8 @@
 
 #include "config.h"
 
-#if CJSON_USE_STDLIB
-	#include <stdio.h>
-	#define CJSON_PRINT( ... ) printf( __VA_ARGS__ )
-#else
-	#ifndef CJSON_PRINT
-	// #error You didn't define the CJSON_PRINT(x) function but you have CJSON_USE_STDLIB off
-	// TODO: Remove this later
-	#include <stdio.h>
-	#define CJSON_PRINT( ... ) printf( __VA_ARGS__ )
-	#endif
-#endif // CJSON_USE_STDLIB
+#include <stdio.h>
+#define CJSON_PRINT( ... ) printf( __VA_ARGS__ )
 
 #ifdef CJSON_DEBUG
 	#define CJSON_LOG( ... ) do { \

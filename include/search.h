@@ -4,10 +4,8 @@
 #include "config.h"
 #include "types.h"
 
-#if CJSON_USE_STDLIB
-	#include <stdlib.h>
-	#include <string.h>
-#endif // CJSON_USE_STDLIB
+#include <stdlib.h>
+#include <string.h>
 
 long CJSON_search_find_first_with_parent(
 	CJSON_NODE* nodes,
