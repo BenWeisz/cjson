@@ -8,13 +8,16 @@
 
 #ifdef CJSON_DEBUG
 	#define CJSON_LOG( ... ) do { \
-			CJSON_PRINT( "\e[1;32mLOG:\e[0m "__VA_ARGS__ ); \
+			CJSON_PRINT( "\e[1;32mLOG:\e[0m | [%s:%d] : ", __FILE__, __LINE__ ); \
+			CJSON_PRINT( __VA_ARGS__ ); \
 		} while( 0 )
 	#define CJSON_WARN( ... ) do { \
-			CJSON_PRINT( "\e[1;33mWARN:\e[0m "__VA_ARGS__ ); \
+			CJSON_PRINT( "\e[1;33mWARN:\e[0m | [%s:%d] : ", __FILE__, __LINE__ ); \
+			CJSON_PRINT( __VA_ARGS__ ); \
 		} while( 0 )
 	#define CJSON_ERROR( ... ) do { \
-			CJSON_PRINT( "\e[1;31mERROR:\e[0m "__VA_ARGS__ ); \
+			CJSON_PRINT( "\e[1;31mERROR\e[0m | [%s:%d] : ", __FILE__, __LINE__ ); \
+			CJSON_PRINT( __VA_ARGS__ ); \
 		} while( 0 )
 #else
 	#define CJSON_LOG( ... )

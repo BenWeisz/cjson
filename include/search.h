@@ -3,6 +3,7 @@
 
 #include "config.h"
 #include "types.h"
+#include "log.h"
 
 #include <stdlib.h>
 #include <string.h>

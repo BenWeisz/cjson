@@ -47,6 +47,7 @@ CJSON_NODE* CJSON_search_wrapper( CJSON_NODE* nodes, const long n, const char* k
 			long key_node_i = CJSON_search_find_first_with_parent( nodes, node_i, nodes[0].rev_i + 1 - 1, node->i );
 			if ( key_node_i == -1 )
 			{
+				CJSON_ERROR( "Trying to get value from object that has no keys / values!\n" );
 				return NULL;
 			}
 			
@@ -60,6 +61,7 @@ CJSON_NODE* CJSON_search_wrapper( CJSON_NODE* nodes, const long n, const char* k
 			}
 			if ( key_node->parent != node->i )
 			{
+				CJSON_ERROR( "Failed to find key \"%s\" in downstream object!\n", key );
 				return NULL;
 			}
 
@@ -69,25 +71,35 @@ CJSON_NODE* CJSON_search_wrapper( CJSON_NODE* nodes, const long n, const char* k
 		{
 			if ( !CJSON_IS_NUM( key ) )
 			{
+				CJSON_ERROR( "Attempting to index into array using non-integeral index!\n" );
 				return NULL;
 			}
 
 			long ind = strtol( key, NULL, 10 );
 			long element_node_i = CJSON_search_find_first_with_parent( nodes, node_i, nodes[0].rev_i + 1 - 1, node->i );
+			if ( element_node_i == -1 )
+			{
+				CJSON_ERROR( "Attempting to index into empty downstream array!\n" );
+				return NULL;
+			}
+
 			node_i = element_node_i + ind;
 
 			 // nodes[0].rev_i + 1 is the pseudo length of nodes
 			if ( node_i >= nodes[0].rev_i + 1 || node_i < 0 )
 			{
+				CJSON_ERROR( "Out of bounds error due to indexing outside of array!\n" );
 				return NULL;
 			}
 			else if ( nodes[ node_i ].parent != node->i )
 			{
+				CJSON_ERROR( "Critical error with CJSON_search_find_first_with_parent" );
 				return NULL;
 			}
 		}
 		else if ( node->type == CJSON_NODE_TYPE_KEY || node->type == CJSON_NODE_TYPE_VALUE )
 		{
+			CJSON_ERROR( "Search algorithm got derailed and tried indexing / keying into a value type / key type!\n" );
 			return NULL;
 		}
 	}

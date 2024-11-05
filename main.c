@@ -10,16 +10,15 @@
 
 int main() 
 {
-	// char* json_lit = "{ \"oina\": [ { \"val1\": 1 }, { \"val2\": null }, {} ] }";
-	// char* json_lit = "{ \"one\": { \"v1\": 1 }, \"two\": { \"v2\": 2} }";
+	// char* json_lit = "{ \"one\": [1, { \"apple\": [null, 1, 2, true, false, \"asdf\"]}, 3, 4, 5, 6, 7,]}";
 	char* json_lit = "{ \"one\": [1, { \"apple\": [null, 1, 2, true, false, \"asdf\"]}, 3, 4, 5, 6, 7,]}";
 
 
 	// TODO: ADD RINGBUFFER OVERWRITE PROTECTION!!!
 	// TODO: Add return types for success / errors
-	// TODO: Rename CJSON_VERIFY_OBJ to CJSON_VERIFY_OBJ_MARKER
 	// TODO: Search for all other TODOs
 	// TODO: Remove all STDLIB includes, swap nulls to NULL and add custom implementation of STR functions
+	// TODO: Add option to print errors or not
 
 	// TODO: STD LIBS
 	// -	We want stdlibs to be one by default and logging errors to be on by default --> but can be turned off 

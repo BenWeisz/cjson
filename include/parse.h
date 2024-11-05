@@ -2,6 +2,7 @@
 #define CJSON_PARSE_H
 
 #include "types.h"
+#include "log.h"
 #include "lexer.h"
 #include "verify.h"
 
