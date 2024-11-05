@@ -14,14 +14,20 @@ FLASE_DEFINE_TEST( search_simple )
 	nodes[0].type = CJSON_NODE_TYPE_OBJ;
 	nodes[0].buf = "{";
 	nodes[0].parent = -1;
+	nodes[0].i = 0;
+	nodes[0].rev_i = 2;
 	
 	nodes[1].type = CJSON_NODE_TYPE_KEY;
 	nodes[1].buf = "key1";
 	nodes[1].parent = 0;
+	nodes[1].i = 1;
+	nodes[1].rev_i = 1;
 
 	nodes[2].type = CJSON_NODE_TYPE_VALUE;
 	nodes[2].buf = "0";
 	nodes[2].parent = 1;
+	nodes[2].i = 2;
+	nodes[2].rev_i = 0;
 
 	CJSON_NODE* node = CJSON_search( nodes, "key1" );
 
@@ -34,30 +40,44 @@ FLASE_DEFINE_TEST( search_nested_obj )
 	nodes[0].type = CJSON_NODE_TYPE_OBJ;
 	nodes[0].buf = "{";
 	nodes[0].parent = -1;
+	nodes[0].i = 0;
+	nodes[0].rev_i = 6;
 
 	nodes[1].type = CJSON_NODE_TYPE_KEY;
 	nodes[1].buf = "key1";
 	nodes[1].parent = 0;
+	nodes[1].i = 1;
+	nodes[1].rev_i = 5;
 
 	nodes[2].type = CJSON_NODE_TYPE_OBJ;
 	nodes[2].buf = "{";
 	nodes[2].parent = 1;
+	nodes[2].i = 2;
+	nodes[2].rev_i = 4;
 
 	nodes[3].type = CJSON_NODE_TYPE_KEY;
 	nodes[3].buf = "key2";
 	nodes[3].parent = 2;
+	nodes[3].i = 3;
+	nodes[3].rev_i = 3;
 
 	nodes[4].type = CJSON_NODE_TYPE_OBJ;
 	nodes[4].buf = "{";
 	nodes[4].parent = 3;
+	nodes[4].i = 4;
+	nodes[4].rev_i = 2;
 
 	nodes[5].type = CJSON_NODE_TYPE_KEY;
 	nodes[5].buf = "key3";
 	nodes[5].parent = 4;
+	nodes[5].i = 5;
+	nodes[5].rev_i = 1;
 
 	nodes[6].type = CJSON_NODE_TYPE_VALUE;
 	nodes[6].buf = "I'm nested";
 	nodes[6].parent = 5;
+	nodes[6].i = 6;
+	nodes[6].rev_i = 0;
 
 	CJSON_NODE* node;
 
@@ -77,30 +97,44 @@ FLASE_DEFINE_TEST( search_nested_arr )
 	nodes[0].type = CJSON_NODE_TYPE_OBJ;
 	nodes[0].buf = "{";
 	nodes[0].parent = -1;
+	nodes[0].i = 0;
+	nodes[0].rev_i = 6;
 
 	nodes[1].type = CJSON_NODE_TYPE_KEY;
 	nodes[1].buf = "key1";
 	nodes[1].parent = 0;
+	nodes[1].i = 1;
+	nodes[1].rev_i = 5;
 
 	nodes[2].type = CJSON_NODE_TYPE_ARR;
 	nodes[2].buf = "[";
 	nodes[2].parent = 1;
+	nodes[2].i = 2;
+	nodes[2].rev_i = 4;
 
 	nodes[3].type = CJSON_NODE_TYPE_ARR;
 	nodes[3].buf = "[";
 	nodes[3].parent = 2;
+	nodes[3].i = 3;
+	nodes[3].rev_i = 3;
 
 	nodes[4].type = CJSON_NODE_TYPE_ARR;
 	nodes[4].buf = "[";
 	nodes[4].parent = 3;
+	nodes[4].i = 4;
+	nodes[4].rev_i = 2;
 
 	nodes[5].type = CJSON_NODE_TYPE_ARR;
 	nodes[5].buf = "[";
 	nodes[5].parent = 4;
+	nodes[5].i = 5;
+	nodes[5].rev_i = 1;
 
 	nodes[6].type = CJSON_NODE_TYPE_VALUE;
 	nodes[6].buf = "I'm nested";
 	nodes[6].parent = 5;
+	nodes[6].i = 6;
+	nodes[6].rev_i = 0;
 
 	CJSON_NODE* node;
 
@@ -123,26 +157,38 @@ FLASE_DEFINE_TEST( search_mixed_nested )
 	nodes[0].type = CJSON_NODE_TYPE_OBJ;
 	nodes[0].buf = "{";
 	nodes[0].parent = -1;
+	nodes[0].i = 0;
+	nodes[0].rev_i = 5;
 
 	nodes[1].type = CJSON_NODE_TYPE_KEY;
 	nodes[1].buf = "key1";
 	nodes[1].parent = 0;
+	nodes[1].i = 1;
+	nodes[1].rev_i = 4;
 
 	nodes[2].type = CJSON_NODE_TYPE_ARR;
 	nodes[2].buf = "[";
 	nodes[2].parent = 1;
+	nodes[2].i = 2;
+	nodes[2].rev_i = 3;
 
 	nodes[3].type = CJSON_NODE_TYPE_OBJ;
 	nodes[3].buf = "{";
 	nodes[3].parent = 2;
+	nodes[3].i = 3;
+	nodes[3].rev_i = 2;
 
 	nodes[4].type = CJSON_NODE_TYPE_KEY;
 	nodes[4].buf = "key2";
 	nodes[4].parent = 3;
+	nodes[4].i = 4;
+	nodes[4].rev_i = 1;
 
 	nodes[5].type = CJSON_NODE_TYPE_VALUE;
 	nodes[5].buf = "I'm nested";
 	nodes[5].parent = 4;
+	nodes[5].i = 5;
+	nodes[5].rev_i = 0;
 
 	CJSON_NODE* node;
 

@@ -127,10 +127,9 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_single_token )
     unsigned int num_token_locations = 1024;
     r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     
-    FLASE_ASSERT( r == 1, "Get key success" ); //TODO: we only care about keys
-    FLASE_ASSERT( num_token_locations == 2, "Found singular token" );
+    FLASE_ASSERT( r == 1, "Get key success" );
+    FLASE_ASSERT( num_token_locations == 1, "There is one key token" );
     FLASE_ASSERT( token_locations[0] == 1, "Key in good location" );
-    FLASE_ASSERT( token_locations[1] == 3, "Value in good location" );
 }
 
 FLASE_DEFINE_TEST( parse_get_key_tokens_single_token_embedded )
@@ -149,10 +148,9 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_single_token_embedded )
     unsigned int num_token_locations = 1024;
     r = CJSON_get_key_tokens( tokens, num_tokens, 3, token_locations, &num_token_locations );
     
-    FLASE_ASSERT( r == 1, "Bad double value" ); // TODO: same thing here, this is bad
-    FLASE_ASSERT( num_token_locations == 2, "Found singular token" );
+    FLASE_ASSERT( r == 1, "Bad double value" );
+    FLASE_ASSERT( num_token_locations == 1, "Single embedded key token" );
     FLASE_ASSERT( token_locations[0] == 4, "Key in good location" );
-    FLASE_ASSERT( token_locations[1] == 6, "Value in good location" );
 }
 
 FLASE_DEFINE_TEST( parse_get_key_tokens_multi_token )
@@ -172,13 +170,10 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_multi_token )
     r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     
     FLASE_ASSERT( r == 1, "Get key value success" ); // TODO: Same thing here
-    FLASE_ASSERT( num_token_locations == 6, "Found multi tokens" );
+    FLASE_ASSERT( num_token_locations == 3, "Found 3 key tokens" );
     FLASE_ASSERT( token_locations[0] == 1, "Key1 in good location" );
-    FLASE_ASSERT( token_locations[1] == 3, "Value1 in good location" );
-    FLASE_ASSERT( token_locations[2] == 5, "Key2 in good location" );
-    FLASE_ASSERT( token_locations[3] == 7, "Value2 in good location" );
-    FLASE_ASSERT( token_locations[4] == 9, "Key3 in good location" );
-    FLASE_ASSERT( token_locations[5] == 11, "Value3 in good location" );
+    FLASE_ASSERT( token_locations[1] == 5, "Key2 in good location" );
+    FLASE_ASSERT( token_locations[2] == 9, "Key3 in good location" );
 }
 
 //////////////////////////////////////////////////////
@@ -296,6 +291,9 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_multi_token_embedded )
     FLASE_ASSERT( token_locations[4] == 15, "Value5 token in right place" );
 }
 
+//////////////////////////////////////////////////////
+// CJSON_parse_wrapper
+//////////////////////////////////////////////////////
 FLASE_DEFINE_TEST( parse__parse_single_level_object )
 {
     char* json_lit = "{ \"apple\": 1, \"pear\": \"gold\", }";
@@ -310,7 +308,7 @@ FLASE_DEFINE_TEST( parse__parse_single_level_object )
 
 	// Setup the parsing nodes
     CJSON_NODE nodes[1024];
-    unsigned int num_nodes = 0;
+    unsigned int num_nodes = 1024;
 
     // Parse the tokens
     r = CJSON_parse_wrapper(
@@ -323,7 +321,7 @@ FLASE_DEFINE_TEST( parse__parse_single_level_object )
     
 	CJSON_lexer_termination_pass( json, tokens, num_tokens );
 
-    FLASE_ASSERT( r == 1, "_parse success" );
+    FLASE_ASSERT( r == 1, "CJSON_parse_wrapper success" );
 	FLASE_ASSERT( num_nodes == 5, "Correct number of nodes" );
 	
   	FLASE_ASSERT( nodes[0].type == CJSON_NODE_TYPE_OBJ, "First node is OBJ" );
@@ -361,7 +359,7 @@ FLASE_DEFINE_TEST( parse__parse_array )
 
 	// Setup the parsing nodes
     CJSON_NODE nodes[1024];
-    unsigned int num_nodes = 0;
+    unsigned int num_nodes = 1024;
 
     // Parse the tokens
     r = CJSON_parse_wrapper(
@@ -424,7 +422,7 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
 
 	// Setup the parsing nodes
     CJSON_NODE nodes[1024];
-    unsigned int num_nodes = 0;
+    unsigned int num_nodes = 1024;
 
     // Parse the tokens
     r = CJSON_parse_wrapper(
@@ -455,9 +453,12 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
 	FLASE_ASSERT( nodes[3].type == CJSON_NODE_TYPE_OBJ, "First array index is an object" );
 	FLASE_ASSERT( nodes[3].buf[0] == '{', "Buf at first array value is object" );
 	FLASE_ASSERT( nodes[3].parent == 2, "Parent of first array element is array node" );
-
-	// FLASE_ASS
+    
+    //TODO Complete the rest of the nodes here
 }
+
+// TODO test CJSON_parse
+// TODO test CJSON_parse_indexing_pass
 
 void test_parse_run_tests()
 {
