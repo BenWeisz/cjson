@@ -52,8 +52,8 @@ typedef struct CJSON_TOKEN
 
 /* Verify Types */
 
-#define CJSON_VERIFY_OBJ 0x00
-#define CJSON_VERIFY_ARR 0x01
+#define CJSON_VERIFY_OBJ_MARKER 0x00
+#define CJSON_VERIFY_ARR_MARKER 0x01
 
 #define CJSON_NODE_TYPE_OBJ     0x00
 #define CJSON_NODE_TYPE_ARR     0x01

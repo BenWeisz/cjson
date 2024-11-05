@@ -16,7 +16,6 @@ int main()
 
 
 	// TODO: ADD RINGBUFFER OVERWRITE PROTECTION!!!
-	// TODO: Remove _ from private functions to avoid issues with some compilers
 	// TODO: Add return types for success / errors
 	// TODO: Rename CJSON_VERIFY_OBJ to CJSON_VERIFY_OBJ_MARKER
 	// TODO: Search for all other TODOs
