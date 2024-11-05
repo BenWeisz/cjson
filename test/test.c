@@ -5,9 +5,9 @@
 
 int main()
 {
-	test_lexer_run_tests();
-	test_verify_run_tests();
-	test_parse_run_tests();
-	test_search_run_tests();
-	return 0;
+    test_lexer_run_tests();
+    test_verify_run_tests();
+    test_parse_run_tests();
+    test_search_run_tests();
+    return 0;
 }

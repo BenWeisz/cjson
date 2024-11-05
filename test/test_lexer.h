@@ -60,9 +60,9 @@ FLASE_DEFINE_TEST( lexer_next_string_state )
 
 FLASE_DEFINE_TEST( lexer_tokenize_valid )
 {
-	char* json_lit = "{ \"apple\": { \"tea\": [1, 2, -123223, 4, \"test\"]}}";
-	char json[1024];
-	strcpy( json, json_lit );
+    char* json_lit = "{ \"apple\": { \"tea\": [1, 2, -123223, 4, \"test\"]}}";
+    char json[1024];
+    strcpy( json, json_lit );
 
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
@@ -115,9 +115,9 @@ FLASE_DEFINE_TEST( lexer_tokenize_valid )
 
 FLASE_DEFINE_TEST( lexer_tokenize_not_enough_tokens )
 {
-	char* json_lit = "{ \"apple\": { \"tea\": [1, 2, -123223, 4, \"test\"]}}";
-	char json[1024];
-	strcpy( json, json_lit );
+    char* json_lit = "{ \"apple\": { \"tea\": [1, 2, -123223, 4, \"test\"]}}";
+    char json[1024];
+    strcpy( json, json_lit );
 
     CJSON_TOKEN tokens[10];
     unsigned int num_tokens = 10;
@@ -129,8 +129,8 @@ FLASE_DEFINE_TEST( lexer_tokenize_not_enough_tokens )
 FLASE_DEFINE_TEST( lexer_double_value )
 {
     char* json_lit = "{\"apple\": 1 1}";
-	char json[1024];
-	strcpy( json, json_lit );
+    char json[1024];
+    strcpy( json, json_lit );
 
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
@@ -144,8 +144,8 @@ FLASE_DEFINE_TEST( lexer_double_value )
 FLASE_DEFINE_TEST( lexer_termination_pass )
 {
     char* json_lit = "{ \"apple\": { \"tea\": [1, 2, -123223, 4, \"test\"]}}";
-	char json[1024];
-	strcpy( json, json_lit );
+    char json[1024];
+    strcpy( json, json_lit );
 
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;

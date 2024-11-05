@@ -10,8 +10,8 @@
 FLASE_DEFINE_TEST( verify_signal_good_scope )
 {
     char* json_lit = "{ \"apple\": { \"tea\": [1, 2, -123223, 4, \"test\"]}}";
-	char json[1024];
-	strcpy( json, json_lit );
+    char json[1024];
+    strcpy( json, json_lit );
 
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
@@ -25,8 +25,8 @@ FLASE_DEFINE_TEST( verify_signal_good_scope )
 FLASE_DEFINE_TEST( verify_signal_good_scope_lots_of_brackets )
 {
     char* json_lit = "{ \"apple\": [[[[], [[], [[[[[]]]]]]]]]}";
-	char json[1024];
-	strcpy( json, json_lit );
+    char json[1024];
+    strcpy( json, json_lit );
 
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
@@ -39,8 +39,8 @@ FLASE_DEFINE_TEST( verify_signal_good_scope_lots_of_brackets )
 FLASE_DEFINE_TEST( verify_signal_good_scope_simple )
 {
     char* json_lit = "{}";
-	char json[1024];
-	strcpy( json, json_lit );
+    char json[1024];
+    strcpy( json, json_lit );
 
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
@@ -53,8 +53,8 @@ FLASE_DEFINE_TEST( verify_signal_good_scope_simple )
 FLASE_DEFINE_TEST( verify_signal_bad_scope_simple )
 {
     char* json_lit = "{]";
-	char json[1024];
-	strcpy( json, json_lit );
+    char json[1024];
+    strcpy( json, json_lit );
 
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
@@ -67,8 +67,8 @@ FLASE_DEFINE_TEST( verify_signal_bad_scope_simple )
 FLASE_DEFINE_TEST( verify_signal_bad_scope )
 {
     char* json_lit = "{\"apple\":[{]}";
-	char json[1024];
-	strcpy( json, json_lit );
+    char json[1024];
+    strcpy( json, json_lit );
 
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
