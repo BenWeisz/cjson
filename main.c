@@ -18,7 +18,7 @@ int main()
 	// TODO: Add return types for success / errors
 	// TODO: Search for all other TODOs
 	// TODO: Remove all STDLIB includes, swap nulls to NULL and add custom implementation of STR functions
-	// TODO: Add option to print errors or not
+	// TODO: Fix the tests compilation errors
 
 	// TODO: STD LIBS
 	// -	We want stdlibs to be one by default and logging errors to be on by default --> but can be turned off 
@@ -34,12 +34,14 @@ int main()
 	unsigned int num_nodes = 1024;
 
 	//////////////////////////////////////////////////////////////////////////////////////
-    // Lex the tokens
-	CJSON_parse( json, nodes, &num_nodes );
+    // Parse the tokens
+	unsigned int r = CJSON_parse( json, nodes, &num_nodes );
+	if ( r == 0 )
+	{
+		printf("ERROR\n");
+		return 0;
+	}
 	/////////////////////////////////////////////////////////////////////////////////////
-
-	// unsigned int r = CJSON_parse( json, &cjson );
-
 
 	// Need to ensure that we can search from any point in the nodes list
 	CJSON_NODE* arr_node = CJSON_search( nodes, "one", "1" );

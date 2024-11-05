@@ -10,7 +10,7 @@
 
 FLASE_DEFINE_TEST( search_simple )
 {
-	struct CJSON_NODE nodes[3];
+	CJSON_NODE nodes[3];
 	nodes[0].type = CJSON_NODE_TYPE_OBJ;
 	nodes[0].buf = "{";
 	nodes[0].parent = -1;
@@ -23,18 +23,14 @@ FLASE_DEFINE_TEST( search_simple )
 	nodes[2].buf = "0";
 	nodes[2].parent = 1;
 
-	struct CJSON cjson;
-	cjson.nodes = nodes;
-	cjson.num_nodes = 3;
-
-	struct CJSON_NODE* node = CJSON_search( &cjson, "key1" );
+	CJSON_NODE* node = CJSON_search( nodes, "key1" );
 
 	FLASE_ASSERT( *node->buf == '0', "key1 is value 0" );
 }
 
 FLASE_DEFINE_TEST( search_nested_obj )
 {
-	struct CJSON_NODE nodes[7];
+	CJSON_NODE nodes[7];
 	nodes[0].type = CJSON_NODE_TYPE_OBJ;
 	nodes[0].buf = "{";
 	nodes[0].parent = -1;
@@ -63,25 +59,21 @@ FLASE_DEFINE_TEST( search_nested_obj )
 	nodes[6].buf = "I'm nested";
 	nodes[6].parent = 5;
 
-	struct CJSON cjson;
-	cjson.nodes = nodes;
-	cjson.num_nodes = 7;
+	CJSON_NODE* node;
 
-	struct CJSON_NODE* node;
-
-	node = CJSON_search( &cjson, "key1", "key2", "key3" );
+	node = CJSON_search( nodes, "key1", "key2", "key3" );
 	FLASE_ASSERT( strcmp( node->buf, "I'm nested" ) == 0, "Search for nested value (object)" );
 
-	node = CJSON_search( &cjson, "key1123", "key2" );
+	node = CJSON_search( nodes, "key1123", "key2" );
 	FLASE_ASSERT( node == NULL, "Early out on bad key" );
 
-	node = CJSON_search( &cjson, "key1", "key2123", "key3" );
+	node = CJSON_search( nodes, "key1", "key2123", "key3" );
 	FLASE_ASSERT( node == NULL, "Mid out on bad key" );
 }
 
 FLASE_DEFINE_TEST( search_nested_arr )
 {
-		struct CJSON_NODE nodes[7];
+	CJSON_NODE nodes[7];
 	nodes[0].type = CJSON_NODE_TYPE_OBJ;
 	nodes[0].buf = "{";
 	nodes[0].parent = -1;
@@ -110,28 +102,24 @@ FLASE_DEFINE_TEST( search_nested_arr )
 	nodes[6].buf = "I'm nested";
 	nodes[6].parent = 5;
 
-	struct CJSON cjson;
-	cjson.nodes = nodes;
-	cjson.num_nodes = 7;
+	CJSON_NODE* node;
 
-	struct CJSON_NODE* node;
-
-	node = CJSON_search( &cjson, "key1", "0", "0", "0", "0" );
+	node = CJSON_search( nodes, "key1", "0", "0", "0", "0" );
 	FLASE_ASSERT( strcmp( node->buf, "I'm nested" ) == 0, "Search for nested value (array)" );
 
-	node = CJSON_search( &cjson, "asdf" );
+	node = CJSON_search( nodes, "asdf" );
 	FLASE_ASSERT( node == NULL, "Early out on nested arrays" );
 
-	node = CJSON_search( &cjson, "key1", "0", "10", "1" );
+	node = CJSON_search( nodes, "key1", "0", "10", "1" );
 	FLASE_ASSERT( node == NULL, "Out on bad middle index" );
 
-	node = CJSON_search( &cjson, "key1", "-1112123111", "10", "1" );
+	node = CJSON_search( nodes, "key1", "-1112123111", "10", "1" );
 	FLASE_ASSERT( node == NULL, "Out on negative key" );
 }
 
 FLASE_DEFINE_TEST( search_mixed_nested )
 {
-	struct CJSON_NODE nodes[6];
+	CJSON_NODE nodes[6];
 	nodes[0].type = CJSON_NODE_TYPE_OBJ;
 	nodes[0].buf = "{";
 	nodes[0].parent = -1;
@@ -156,16 +144,12 @@ FLASE_DEFINE_TEST( search_mixed_nested )
 	nodes[5].buf = "I'm nested";
 	nodes[5].parent = 4;
 
-	struct CJSON cjson;
-	cjson.nodes = nodes;
-	cjson.num_nodes = 6;
+	CJSON_NODE* node;
 
-	struct CJSON_NODE* node;
-
-	node = CJSON_search( &cjson, "key1", "0", "key2" );
+	node = CJSON_search( nodes, "key1", "0", "key2" );
 	FLASE_ASSERT( strcmp( node->buf, "I'm nested" ) == 0, "Search for mixed nested value (array)" );
 
-	node = CJSON_search( &cjson, "key1", "0", "key2", "extra value" );
+	node = CJSON_search( nodes, "key1", "0", "key2", "extra value" );
 	FLASE_ASSERT( node == NULL, "Return null on extra keys / indices" );	
 }
 
