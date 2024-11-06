@@ -454,7 +454,29 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
     FLASE_ASSERT( nodes[3].buf[0] == '{', "Buf at first array value is object" );
     FLASE_ASSERT( nodes[3].parent == 2, "Parent of first array element is array node" );
     
-    //TODO Complete the rest of the nodes here
+    FLASE_ASSERT( nodes[4].type == CJSON_NODE_TYPE_OBJ, "Second array index is an object" );
+    FLASE_ASSERT( nodes[4].buf[0] == '{', "Buf at second array value is object" );
+    FLASE_ASSERT( nodes[4].parent == 2, "Parent of second array element is array node" );
+    
+    FLASE_ASSERT( nodes[5].type == CJSON_NODE_TYPE_OBJ, "Third array index is an object" );
+    FLASE_ASSERT( nodes[5].buf[0] == '{', "Buf at third array value is object" );
+    FLASE_ASSERT( nodes[5].parent == 2, "Parent of third array element is array node" );
+
+    FLASE_ASSERT( nodes[6].type == CJSON_NODE_TYPE_KEY, "First element object has key" );
+    FLASE_ASSERT( strcmp( nodes[6].buf, "val1" ) == 0, "Key is val1" );
+    FLASE_ASSERT( nodes[6].parent == 3, "Parent of val1 key is object that is the first element of the only array" );
+    
+    FLASE_ASSERT( nodes[7].type == CJSON_NODE_TYPE_KEY, "Second element object has key" );
+    FLASE_ASSERT( strcmp( nodes[7].buf, "val2" ) == 0, "Key is val2" );
+    FLASE_ASSERT( nodes[7].parent == 4, "Parent of val2 key is object that is the second element of the only array" );
+
+    FLASE_ASSERT( nodes[8].type == CJSON_NODE_TYPE_VALUE, "First element object has key" );
+    FLASE_ASSERT( nodes[8].buf[0] == '1', "val1 value is 1" );
+    FLASE_ASSERT( nodes[8].parent == 6, "1's parent is val1" );
+    
+    FLASE_ASSERT( nodes[9].type == CJSON_NODE_TYPE_VALUE, "First element object has key" );
+    FLASE_ASSERT( strcmp( nodes[9].buf, "null " ) == 0, "Key is val2" );
+    FLASE_ASSERT( nodes[9].parent == 7, "null's parent is val2" );
 }
 
 // TODO test CJSON_parse
