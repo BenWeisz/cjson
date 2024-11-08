@@ -14,7 +14,7 @@
 #endif // CJSON_PARSE_LEVEL_MAX_ELEMENTS
 
 #ifndef CJSON_PARSE_QUEUE_SIZE
-    #define CJSON_PARSE_QUEUE_SIZE              CJSON_LEXER_TOKEN_BUFFER_SIZE
+    #define CJSON_PARSE_QUEUE_SIZE              ( CJSON_LEXER_TOKEN_BUFFER_SIZE / 2 ) // This should probably be enough
 #endif // CJSON_PARSE_QUEUE_SIZE
 
 #endif // CJSON_CONFIG_H

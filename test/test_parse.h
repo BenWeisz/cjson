@@ -169,7 +169,7 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_multi_token )
     unsigned int num_token_locations = 1024;
     r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     
-    FLASE_ASSERT( r == CJSON_SUCCESS, "Get key value success" ); // TODO: Same thing here
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Get key value success" );
     FLASE_ASSERT( num_token_locations == 3, "Found 3 key tokens" );
     FLASE_ASSERT( token_locations[0] == 1, "Key1 in good location" );
     FLASE_ASSERT( token_locations[1] == 5, "Key2 in good location" );
