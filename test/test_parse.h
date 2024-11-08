@@ -475,7 +475,7 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
     FLASE_ASSERT( nodes[8].parent == 6, "1's parent is val1" );
     
     FLASE_ASSERT( nodes[9].type == CJSON_NODE_TYPE_VALUE, "First element object has key" );
-    FLASE_ASSERT( strcmp( nodes[9].buf, "null " ) == 0, "Key is val2" );
+    FLASE_ASSERT( strcmp( nodes[9].buf, "null" ) == 0, "Key is val2" );
     FLASE_ASSERT( nodes[9].parent == 7, "null's parent is val2" );
 }
 

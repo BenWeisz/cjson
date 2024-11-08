@@ -173,6 +173,25 @@ FLASE_DEFINE_TEST( lexer_termination_pass )
     }
 }
 
+FLASE_DEFINE_TEST( lexer_whitespace_value_truncation )
+{
+    char* json_lit = "{ \"1\": [1], \"2\": [ 2],\"3\":[ 3], \"4\": [ 4 ], \"5\": [ 5, ]}";
+    char json[1024];
+    strcpy( json, json_lit );
+
+    CJSON_TOKEN tokens[1024];
+    unsigned int num_tokens = 1024;
+    
+    CJSON_lexer_tokenize( json, tokens, &num_tokens );
+    CJSON_lexer_termination_pass( json, tokens, num_tokens );
+    
+    FLASE_ASSERT( json[tokens[4].start] == '1' && json[tokens[4].start + 1] == '\0', "Only 1 is tokenized" );
+    FLASE_ASSERT( json[tokens[10].start] == '2' && json[tokens[10].start + 1] == '\0', "Only 2 is tokenized" );
+    FLASE_ASSERT( json[tokens[16].start] == '3' && json[tokens[16].start + 1] == '\0', "Only 3 is tokenized" );
+    FLASE_ASSERT( json[tokens[22].start] == '4' && json[tokens[22].start + 1] == '\0', "Only 4 is tokenized" );
+    FLASE_ASSERT( json[tokens[28].start] == '5' && json[tokens[28].start + 1] == '\0', "Only 5 is tokenized" );
+}
+
 void test_lexer_run_tests()
 {
     FLASE_RUN_TEST( lexer_is_whitespace );
@@ -181,6 +200,7 @@ void test_lexer_run_tests()
     FLASE_RUN_TEST( lexer_tokenize_not_enough_tokens );
     FLASE_RUN_TEST( lexer_double_value );
     FLASE_RUN_TEST( lexer_termination_pass );
+    FLASE_RUN_TEST( lexer_whitespace_value_truncation );
 }
 
 #endif // TEST_LEXER_H

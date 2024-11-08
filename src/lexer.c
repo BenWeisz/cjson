@@ -95,7 +95,7 @@ unsigned int CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsigne
             }
             else if ( token->start != CJSON_TOKEN_SENTINEL )
             {
-                token->end = pos;
+                token->end = pos - 1;
                 token = &( tokens[num_tokens_used++] );
                 token->start = CJSON_TOKEN_SENTINEL;
                 token->end = CJSON_TOKEN_SENTINEL; 
