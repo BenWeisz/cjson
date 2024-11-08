@@ -375,12 +375,12 @@ FLASE_DEFINE_TEST( parse__parse_array )
     FLASE_ASSERT( r == 1, "_parse success" );
     FLASE_ASSERT( num_nodes == 8, "Correct number of nodes" );
     
-      FLASE_ASSERT( nodes[0].type == CJSON_NODE_TYPE_OBJ, "First node is OBJ" );
-      FLASE_ASSERT( nodes[0].buf[0] == '{', "_parse OBJ text matches" );
-      FLASE_ASSERT( nodes[0].parent == -1, "Root node has correct parent" );
+    FLASE_ASSERT( nodes[0].type == CJSON_NODE_TYPE_OBJ, "First node is OBJ" );
+    FLASE_ASSERT( nodes[0].buf[0] == '{', "_parse OBJ text matches" );
+    FLASE_ASSERT( nodes[0].parent == -1, "Root node has correct parent" );
 
-      FLASE_ASSERT( nodes[1].type == CJSON_NODE_TYPE_KEY, "First sub node is a key" );
-      FLASE_ASSERT( strcmp( nodes[1].buf, "arr" ) == 0, "arr is the first key");
+    FLASE_ASSERT( nodes[1].type == CJSON_NODE_TYPE_KEY, "First sub node is a key" );
+    FLASE_ASSERT( strcmp( nodes[1].buf, "arr" ) == 0, "arr is the first key");
     FLASE_ASSERT( nodes[1].parent == 0, "arr is parented to the root node" );
 
     FLASE_ASSERT( nodes[2].type == CJSON_NODE_TYPE_ARR, "First value is an array");
@@ -479,8 +479,26 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
     FLASE_ASSERT( nodes[9].parent == 7, "null's parent is val2" );
 }
 
-// TODO test CJSON_parse
-// TODO test CJSON_parse_indexing_pass
+FLASE_DEFINE_TEST( parse_parse )
+{
+    char* json_lit = "{ \"oina\": [ { \"val1\": 1 }, { \"val2\": null }, {} ] }";
+    char json[1024];
+    strcpy( json, json_lit );
+
+    // Setup the parsing nodes
+    CJSON_NODE nodes[1024];
+    unsigned int num_nodes = 1024;
+
+    // Parse the tokens
+    unsigned int r = CJSON_parse(
+        json,
+        nodes,
+        &num_nodes
+    );
+
+    FLASE_ASSERT( r == 1, "Parsing passes" );
+    FLASE_ASSERT( nodes[0].i == nodes[num_nodes - 1].rev_i, "i of first node and rev_i of last node matches" );
+}
 
 void test_parse_run_tests()
 {
@@ -504,6 +522,8 @@ void test_parse_run_tests()
     FLASE_RUN_TEST( parse__parse_single_level_object );
     FLASE_RUN_TEST( parse__parse_array );
     FLASE_RUN_TEST( parse__parse_object_in_array );
+
+    FLASE_RUN_TEST( parse_parse );
 }
 
 #endif // TEST_PARSE_H
