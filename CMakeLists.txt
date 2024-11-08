@@ -10,7 +10,8 @@ set( SOURCE_FILES src/io.c
    				src/search.c
 				src/lexer.c
 				src/verify.c
-				src/parse.c)
+				src/parse.c
+				src/str.c)
 
 add_executable( ${EXE_NAME} main.c ${SOURCE_FILES} )
 target_include_directories( ${EXE_NAME} PUBLIC include/ )

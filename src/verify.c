@@ -42,5 +42,10 @@ unsigned int CJSON_verify_scopes( CJSON_TOKEN* tokens, unsigned int num_tokens )
         }
     }
 
+    if ( scope_stack_top != 0 )
+    {
+        CJSON_ERROR( "Some scopes were not closed!\n" );
+    }
+
     return scope_stack_top == 0;
 }

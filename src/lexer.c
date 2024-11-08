@@ -1,10 +1,5 @@
 #include "../include/lexer.h"
 
-unsigned int CJSON_lexer_is_whitespace( const char c )
-{
-    return c == '\t' || c == '\n' || c == '\r' || c == ' ';
-}
-
 unsigned char CJSON_lexer_next_string_state( const unsigned char curr_state, const char c )
 {
     if ( curr_state == CJSON_LEXER_STRING_STATE_OUT )
@@ -85,7 +80,7 @@ unsigned int CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsigne
                 // But prenitializing can also be bad because the tokens array is just an estimate of the number of tokens we need
                 // If we guess wrong, then we are spending a bunch of time initializing tokens structs we will never use. Thus killing the advantages of vectorizing memset
             }
-            else if ( CJSON_lexer_is_whitespace( c ) == 0 )
+            else if ( CJSON_char_is_whitespace( c ) == 0 )
             {
                 if ( token->start == CJSON_TOKEN_SENTINEL )
                 {

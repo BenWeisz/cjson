@@ -3,8 +3,7 @@
 
 #include "types.h"
 #include "log.h"
-
-unsigned int CJSON_lexer_is_whitespace( const char c );
+#include "str.h"
 
 unsigned char CJSON_lexer_next_string_state( const unsigned char curr_state, const char c );
 

@@ -3,10 +3,9 @@
 
 #include "config.h"
 
-#include <stdio.h>
-#define CJSON_PRINT( ... ) printf( __VA_ARGS__ )
-
 #ifdef CJSON_DEBUG
+    #include <stdio.h>
+    #define CJSON_PRINT( ... ) printf( __VA_ARGS__ )
     #define CJSON_LOG( ... ) do { \
             CJSON_PRINT( "\e[1;32mLOG:\e[0m | [%s:%d] : ", __FILE__, __LINE__ ); \
             CJSON_PRINT( __VA_ARGS__ ); \

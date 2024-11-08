@@ -10,21 +10,21 @@
 
 FLASE_DEFINE_TEST( lexer_is_whitespace )
 {
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( ' ' ) == 1, "Space is whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( '\t' ) == 1, "Tab is whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( '\r' ) == 1, "\\r is whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( '\n' ) == 1, "\\n is whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( ' ' ) == 1, "Space is whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( '\t' ) == 1, "Tab is whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( '\r' ) == 1, "\\r is whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( '\n' ) == 1, "\\n is whitespace" );
 
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( '"' ) == 0, "\" is not whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( 't' ) == 0, "t is not whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( 'f' ) == 0, "f is not whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( 'n' ) == 0, "n is not whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( '{' ) == 0, "{ is not whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( '}' ) == 0, "} is not whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( '[' ) == 0, "[ is not whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( ']' ) == 0, "] is not whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( '-' ) == 0, "- is not whitespace" );
-    FLASE_ASSERT( CJSON_lexer_is_whitespace( '0' ) == 0, "0 is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( '"' ) == 0, "\" is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( 't' ) == 0, "t is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( 'f' ) == 0, "f is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( 'n' ) == 0, "n is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( '{' ) == 0, "{ is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( '}' ) == 0, "} is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( '[' ) == 0, "[ is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( ']' ) == 0, "] is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( '-' ) == 0, "- is not whitespace" );
+    FLASE_ASSERT( CJSON_char_is_whitespace( '0' ) == 0, "0 is not whitespace" );
 }
 
 FLASE_DEFINE_TEST( lexer_next_string_state )

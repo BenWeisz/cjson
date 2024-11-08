@@ -11,7 +11,7 @@
 int main() 
 {
     // char* json_lit = "{ \"oina\": [ { \"val1\": 1 }, { \"val2\": null }, {} ] }";
-    char* json_lit = "{ \"o\": null }";
+    char* json_lit = "{ \"o\": null";
 	char json[1024];
 	strcpy( json, json_lit );
 	

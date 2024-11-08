@@ -4,9 +4,7 @@
 #include "config.h"
 #include "types.h"
 #include "log.h"
-
-#include <stdlib.h>
-#include <string.h>
+#include "str.h"
 
 long CJSON_search_find_first_with_parent(
     CJSON_NODE* nodes,
