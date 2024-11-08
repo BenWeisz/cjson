@@ -19,7 +19,7 @@ FLASE_DEFINE_TEST( verify_signal_good_scope )
     CJSON_lexer_tokenize( json, tokens, &num_tokens );
 
     unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
-    FLASE_ASSERT( r == 1, "Valid scope" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Valid scope" );
 }
 
 FLASE_DEFINE_TEST( verify_signal_good_scope_lots_of_brackets )
@@ -33,7 +33,7 @@ FLASE_DEFINE_TEST( verify_signal_good_scope_lots_of_brackets )
     
     CJSON_lexer_tokenize( json, tokens, &num_tokens );
     unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
-    FLASE_ASSERT( r == 1, "Valid scope - many arrays" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Valid scope - many arrays" );
 }
 
 FLASE_DEFINE_TEST( verify_signal_good_scope_simple )
@@ -47,7 +47,7 @@ FLASE_DEFINE_TEST( verify_signal_good_scope_simple )
     
     CJSON_lexer_tokenize( json, tokens, &num_tokens );
     unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
-    FLASE_ASSERT( r == 1, "Valid scope - simple" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Valid scope - simple" );
 }
 
 FLASE_DEFINE_TEST( verify_signal_bad_scope_simple )
@@ -61,7 +61,7 @@ FLASE_DEFINE_TEST( verify_signal_bad_scope_simple )
     
     CJSON_lexer_tokenize( json, tokens, &num_tokens );
     unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
-    FLASE_ASSERT( r == 0, "Invalid scope - simple" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Invalid scope - simple" );
 }
 
 FLASE_DEFINE_TEST( verify_signal_bad_scope )
@@ -75,7 +75,7 @@ FLASE_DEFINE_TEST( verify_signal_bad_scope )
     
     CJSON_lexer_tokenize( json, tokens, &num_tokens );
     unsigned int r = CJSON_verify_scopes( tokens, num_tokens );
-    FLASE_ASSERT( r == 0, "Invalid scope " );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Invalid scope " );
 }
 
 void test_verify_run_tests()

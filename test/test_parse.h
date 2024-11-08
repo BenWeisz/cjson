@@ -22,7 +22,7 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_bad_start )
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Tokens must start with {" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Tokens must start with {" );
 }
 
 FLASE_DEFINE_TEST( parse_get_key_tokens_bad_double_comma )
@@ -39,7 +39,7 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_bad_double_comma )
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Bad double comma" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Bad double comma" );
 }
 
 FLASE_DEFINE_TEST( parse_get_key_tokens_bad_comma_colon )
@@ -56,7 +56,7 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_bad_comma_colon )
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Bad comma and colon" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Bad comma and colon" );
 }
 
 FLASE_DEFINE_TEST( parse_get_key_tokens_bad_comma )
@@ -73,7 +73,7 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_bad_comma )
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Bad comma" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Bad comma" );
 }
 
 FLASE_DEFINE_TEST( parse_get_key_tokens_bad_value )
@@ -90,7 +90,7 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_bad_value )
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Get key failure" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Get key failure" );
 }
 
 FLASE_DEFINE_TEST( parse_get_key_tokens_bad_double_value )
@@ -103,12 +103,12 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_bad_double_value )
     unsigned int num_tokens = 1024;
     
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Tokenizing parse sample success" );
 
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Get key success" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Get key success" );
 }
 
 FLASE_DEFINE_TEST( parse_get_key_tokens_single_token )
@@ -121,13 +121,13 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_single_token )
     unsigned int num_tokens = 1024;
     
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Tokenizing parse sample success" );
 
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     
-    FLASE_ASSERT( r == 1, "Get key success" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Get key success" );
     FLASE_ASSERT( num_token_locations == 1, "There is one key token" );
     FLASE_ASSERT( token_locations[0] == 1, "Key in good location" );
 }
@@ -142,13 +142,13 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_single_token_embedded )
     unsigned int num_tokens = 1024;
     
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Tokenizing parse sample success" );
 
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     r = CJSON_get_key_tokens( tokens, num_tokens, 3, token_locations, &num_token_locations );
     
-    FLASE_ASSERT( r == 1, "Bad double value" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Bad double value" );
     FLASE_ASSERT( num_token_locations == 1, "Single embedded key token" );
     FLASE_ASSERT( token_locations[0] == 4, "Key in good location" );
 }
@@ -163,13 +163,13 @@ FLASE_DEFINE_TEST( parse_get_key_tokens_multi_token )
     unsigned int num_tokens = 1024;
     
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Tokenizing parse sample success" );
 
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     r = CJSON_get_key_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
     
-    FLASE_ASSERT( r == 1, "Get key value success" ); // TODO: Same thing here
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Get key value success" ); // TODO: Same thing here
     FLASE_ASSERT( num_token_locations == 3, "Found 3 key tokens" );
     FLASE_ASSERT( token_locations[0] == 1, "Key1 in good location" );
     FLASE_ASSERT( token_locations[1] == 5, "Key2 in good location" );
@@ -193,7 +193,7 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_bad_start )
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Tokens must start with [" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Tokens must start with [" );
 }
 
 FLASE_DEFINE_TEST( parse_get_value_tokens_bad_double_comma )
@@ -210,7 +210,7 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_bad_double_comma )
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Bad double comma" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Bad double comma" );
 }
 
 FLASE_DEFINE_TEST( parse_get_value_tokens_bad_comma )
@@ -227,7 +227,7 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_bad_comma )
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Bad comma" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Bad comma" );
 }
 
 FLASE_DEFINE_TEST( parse_get_value_tokens_bad_brackets )
@@ -244,7 +244,7 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_bad_brackets )
     unsigned int token_locations[1024];
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
-    FLASE_ASSERT( r == 0, "Bad brackets" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Bad brackets" );
 }
 
 FLASE_DEFINE_TEST( parse_get_value_tokens_single_token )
@@ -262,7 +262,7 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_single_token )
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 0, token_locations, &num_token_locations );
 
-    FLASE_ASSERT( r == 1, "Get value tokens succeeded" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Get value tokens succeeded" );
     FLASE_ASSERT( num_token_locations == 1, "Found only 1 token" );
     FLASE_ASSERT( token_locations[0] == 1, "Value token in right place" );
 }
@@ -282,7 +282,7 @@ FLASE_DEFINE_TEST( parse_get_value_tokens_multi_token_embedded )
     unsigned int num_token_locations = 1024;
     unsigned int r = CJSON_get_value_tokens( tokens, num_tokens, 6, token_locations, &num_token_locations );
 
-    FLASE_ASSERT( r == 1, "Get value tokens succeeded" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Get value tokens succeeded" );
     FLASE_ASSERT( num_token_locations == 5, "Found all 5 tokens" );
     FLASE_ASSERT( token_locations[0] == 7, "Value1 token in right place" );
     FLASE_ASSERT( token_locations[1] == 9, "Value2 token in right place" );
@@ -304,7 +304,7 @@ FLASE_DEFINE_TEST( parse__parse_single_level_object )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    FLASE_ASSERT( r == 1, "Parsing test, lexer passes" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Parsing test, lexer passes" );
 
     // Setup the parsing nodes
     CJSON_NODE nodes[1024];
@@ -321,7 +321,7 @@ FLASE_DEFINE_TEST( parse__parse_single_level_object )
     
     CJSON_lexer_termination_pass( json, tokens, num_tokens );
 
-    FLASE_ASSERT( r == 1, "CJSON_parse_wrapper success" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "CJSON_parse_wrapper success" );
     FLASE_ASSERT( num_nodes == 5, "Correct number of nodes" );
     
       FLASE_ASSERT( nodes[0].type == CJSON_NODE_TYPE_OBJ, "First node is OBJ" );
@@ -355,7 +355,7 @@ FLASE_DEFINE_TEST( parse__parse_array )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    FLASE_ASSERT( r == 1, "Parsing test, lexer passes" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Parsing test, lexer passes" );
 
     // Setup the parsing nodes
     CJSON_NODE nodes[1024];
@@ -372,7 +372,7 @@ FLASE_DEFINE_TEST( parse__parse_array )
     
     CJSON_lexer_termination_pass( json, tokens, num_tokens );
 
-    FLASE_ASSERT( r == 1, "_parse success" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "_parse success" );
     FLASE_ASSERT( num_nodes == 8, "Correct number of nodes" );
     
     FLASE_ASSERT( nodes[0].type == CJSON_NODE_TYPE_OBJ, "First node is OBJ" );
@@ -418,7 +418,7 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
     CJSON_TOKEN tokens[1024];
     unsigned int num_tokens = 1024;
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    FLASE_ASSERT( r == 1, "Parsing test, lexer passes" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Parsing test, lexer passes" );
 
     // Setup the parsing nodes
     CJSON_NODE nodes[1024];
@@ -435,7 +435,7 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
     
     CJSON_lexer_termination_pass( json, tokens, num_tokens );
 
-    FLASE_ASSERT( r == 1, "_parse success" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "_parse success" );
     FLASE_ASSERT( num_nodes == 10, "Correct number of nodes" );
 
     FLASE_ASSERT( nodes[0].type == CJSON_NODE_TYPE_OBJ, "Root node exists" );
@@ -479,6 +479,9 @@ FLASE_DEFINE_TEST( parse__parse_object_in_array )
     FLASE_ASSERT( nodes[9].parent == 7, "null's parent is val2" );
 }
 
+//////////////////////////////////////////////////////
+// CJSON_parse
+//////////////////////////////////////////////////////
 FLASE_DEFINE_TEST( parse_parse )
 {
     char* json_lit = "{ \"oina\": [ { \"val1\": 1 }, { \"val2\": null }, {} ] }";
@@ -496,7 +499,7 @@ FLASE_DEFINE_TEST( parse_parse )
         &num_nodes
     );
 
-    FLASE_ASSERT( r == 1, "Parsing passes" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Parsing passes" );
     FLASE_ASSERT( nodes[0].i == nodes[num_nodes - 1].rev_i, "i of first node and rev_i of last node matches" );
 }
 

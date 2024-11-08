@@ -109,11 +109,11 @@ unsigned int CJSON_lexer_tokenize( const char* buf, CJSON_TOKEN* tokens, unsigne
     if ( num_tokens_used >= *num_tokens )
     {
         CJSON_ERROR( "Ran out of tokens for use in the lexer! Please increase temp mem size macro.\n" );
-        return 0;
+        return CJSON_FAILURE;
     }
 
     *num_tokens = num_tokens_used - 1;
-    return 1;
+    return CJSON_SUCCESS;
 }
 
 void CJSON_lexer_termination_pass( char* buf, CJSON_TOKEN* tokens, unsigned int num_tokens )

@@ -69,7 +69,7 @@ FLASE_DEFINE_TEST( lexer_tokenize_valid )
     
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
 
-    FLASE_ASSERT( r == 1, "Tokenizer passes" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Tokenizer passes" );
     FLASE_ASSERT( num_tokens == 19, "Tokenizer recorded correct number of tokens");
 
     FLASE_ASSERT( tokens[0].start == 0 && tokens[0].end == 0, "Token 0 has correct start and end" );
@@ -123,7 +123,7 @@ FLASE_DEFINE_TEST( lexer_tokenize_not_enough_tokens )
     unsigned int num_tokens = 10;
     
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    FLASE_ASSERT( r == 0, "Tokenizer should fail because not enough tokens" );
+    FLASE_ASSERT( r == CJSON_FAILURE, "Tokenizer should fail because not enough tokens" );
 }
 
 FLASE_DEFINE_TEST( lexer_double_value )
@@ -136,7 +136,7 @@ FLASE_DEFINE_TEST( lexer_double_value )
     unsigned int num_tokens = 1024;
     
     unsigned int r = CJSON_lexer_tokenize( json, tokens, &num_tokens );
-    FLASE_ASSERT( r == 1, "Tokenizing parse sample success" );
+    FLASE_ASSERT( r == CJSON_SUCCESS, "Tokenizing parse sample success" );
 
     FLASE_ASSERT( num_tokens == 6, "Correct number of tokens tokenized" );
 }

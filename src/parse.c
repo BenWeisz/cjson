@@ -11,7 +11,7 @@ unsigned int CJSON_get_key_tokens(
     if ( token->type != CJSON_TOKEN_OBJS )
     {
         CJSON_ERROR( "The first token must be of an object type if we are to get it's keys!\n" );
-        return 0;
+        return CJSON_FAILURE;
     }
 
     unsigned int curr_num_token_locations = 0;
@@ -33,7 +33,7 @@ unsigned int CJSON_get_key_tokens(
             if ( scope_level == 0 )
             {
                 CJSON_ERROR( "Attempting to close scope that doesnt exist!\n" );
-                return 0;
+                return CJSON_FAILURE;
             }
             scope_level--;
         }
@@ -49,7 +49,7 @@ unsigned int CJSON_get_key_tokens(
                 else
                 {
                     CJSON_ERROR( "The token type following a comma type token must be of string type!\n" );
-                    return 0;
+                    return CJSON_FAILURE;
                 }
             }
             else if ( kv_state == CJSON_PARSE_KV_STATE_KEY )
@@ -58,7 +58,7 @@ unsigned int CJSON_get_key_tokens(
                 else
                 {
                     CJSON_ERROR( "The token type following a string token that is a key must be a colon type token!\n" );
-                    return 0;
+                    return CJSON_FAILURE;
                 }
             }
             else if ( kv_state == CJSON_PARSE_KV_STATE_COL )
@@ -70,7 +70,7 @@ unsigned int CJSON_get_key_tokens(
                     token_type == CJSON_TOKEN_UNK )
                 {
                     CJSON_ERROR( "The token type following a colon type token must be a value class token!\n" );
-                    return 0;
+                    return CJSON_FAILURE;
                 }
                 else kv_state = CJSON_PARSE_KV_STATE_VAL;
             }
@@ -80,7 +80,7 @@ unsigned int CJSON_get_key_tokens(
                 else
                 {
                     CJSON_ERROR( "A comma type token must follow a set of value type tokens!\n" );
-                    return 0;
+                    return CJSON_FAILURE;
                 }
             }
         }
@@ -89,12 +89,12 @@ unsigned int CJSON_get_key_tokens(
     if ( scope_level != 0 )
     {
         CJSON_ERROR( "After all tokens are processed, all scopes must be closed!\n" );
-        return 0;
+        return CJSON_FAILURE;
     }
 
     *num_token_locations = curr_num_token_locations;
 
-    return 1;
+    return CJSON_SUCCESS;
 }
 
 unsigned int CJSON_get_value_tokens( 
@@ -108,7 +108,7 @@ unsigned int CJSON_get_value_tokens(
     if ( token->type != CJSON_TOKEN_ARRS )
     {
         CJSON_ERROR( "The first token must be of an array opening token if we are to get the value's of the array!\n" );
-        return 0;
+        return CJSON_FAILURE;
     }
 
     unsigned int curr_num_token_locations = 0;
@@ -144,7 +144,7 @@ unsigned int CJSON_get_value_tokens(
                     token_type == CJSON_TOKEN_UNK )
                 {
                     CJSON_ERROR( "A value type token must follow a comma type token!\n" );
-                    return 0;
+                    return CJSON_FAILURE;
                 }
                 else 
                 {
@@ -158,7 +158,7 @@ unsigned int CJSON_get_value_tokens(
                 else
                 {
                     CJSON_ERROR( "A comma type token must follow a set of value type tokens!\n" );
-                    return 0;
+                    return CJSON_FAILURE;
                 }
             }
         }
@@ -167,12 +167,12 @@ unsigned int CJSON_get_value_tokens(
     if ( scope_level != 0 )
     {
         CJSON_ERROR( "After all tokens are processed, all scopes must be closed!\n" );
-        return 0;
+        return CJSON_FAILURE;
     }
 
     *num_token_locations = curr_num_token_locations;
 
-    return 1;
+    return CJSON_SUCCESS;
 }
 
 void CJSON_parse_indexing_pass( CJSON_NODE* nodes, unsigned int num_nodes )
@@ -198,7 +198,7 @@ unsigned int CJSON_parse_wrapper( CJSON_NODE* nodes, unsigned int* num_nodes, CJ
     if ( token->type != CJSON_TOKEN_OBJS )
     {
         CJSON_ERROR( "The first token parsed must be the root object's opening token type token!\n" );
-        return 0;
+        return CJSON_FAILURE;
     }
     
     // Queue the first parse element
@@ -230,7 +230,7 @@ unsigned int CJSON_parse_wrapper( CJSON_NODE* nodes, unsigned int* num_nodes, CJ
             if ( r == 0 )
             {
                 // Error reporting handled by CJSON_get_key_tokens
-                return 0;
+                return CJSON_FAILURE;
             }
 
             unsigned int i = 0;
@@ -258,7 +258,7 @@ unsigned int CJSON_parse_wrapper( CJSON_NODE* nodes, unsigned int* num_nodes, CJ
             if ( r == 0 ) 
             {
                 // Error reporting handled by CJSON_get_value_tokens
-                return 0;
+                return CJSON_FAILURE;
             }
 
             unsigned int i = 0;
@@ -316,12 +316,12 @@ unsigned int CJSON_parse_wrapper( CJSON_NODE* nodes, unsigned int* num_nodes, CJ
     if ( token_queue_size != 0 )
     {
         CJSON_ERROR( "All CJSON_NODE slots used up in parsing the input string, please increase the number of CJSON_NODE's you're allocating for this parsing function!\n" );
-        return 0;
+        return CJSON_FAILURE;
     }
 
     *num_nodes = curr_node_i;
 
-    return 1;
+    return CJSON_SUCCESS;
 }
 
 unsigned int CJSON_parse_with_settings( char* buf, CJSON_NODE* nodes, unsigned int* num_nodes, const unsigned int settings )
@@ -335,7 +335,7 @@ unsigned int CJSON_parse_with_settings( char* buf, CJSON_NODE* nodes, unsigned i
     if ( r == 0 ) 
     {
         // Error reporting handled by CJSON_lexer_tokenize
-        return 0;
+        return CJSON_FAILURE;
     }
     
     if ( settings & CJSON_PARSE_SCOPE_CHECKING )
@@ -345,7 +345,7 @@ unsigned int CJSON_parse_with_settings( char* buf, CJSON_NODE* nodes, unsigned i
         if ( r == 0 )
         {
             // Error reporting handled by CJSON_verify_scopes
-            return 0;
+            return CJSON_FAILURE;
         }
     }
 
@@ -354,7 +354,7 @@ unsigned int CJSON_parse_with_settings( char* buf, CJSON_NODE* nodes, unsigned i
     if ( r == 0 )
     {
         // Error reporting handled by CJSON_parse_wrapper
-        return 0;
+        return CJSON_FAILURE;
     }
 
     // Populate the rev_i variable in each CJSON_NODE
@@ -363,7 +363,7 @@ unsigned int CJSON_parse_with_settings( char* buf, CJSON_NODE* nodes, unsigned i
     // Terminate the tokens in the buffer
     CJSON_lexer_termination_pass( buf, tokens, num_tokens );
     
-    return 1;
+    return CJSON_SUCCESS;
 }
 
 unsigned int CJSON_parse( char* buf, CJSON_NODE* nodes, unsigned int* num_nodes )

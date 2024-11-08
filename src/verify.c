@@ -8,7 +8,7 @@ unsigned int CJSON_verify_scopes( CJSON_TOKEN* tokens, unsigned int num_tokens )
     if ( token->type != CJSON_TOKEN_OBJS )
     {
         CJSON_ERROR( "The token type of the root node's first token must be an opening object type token!\n" );
-        return 0;
+        return CJSON_FAILURE;
     }
 
     unsigned char scope_stack[CJSON_VERIFY_SCOPE_STACK_SIZE];
@@ -28,7 +28,7 @@ unsigned int CJSON_verify_scopes( CJSON_TOKEN* tokens, unsigned int num_tokens )
             else
             {
                 CJSON_ERROR( "Trying to close scope that doesn't exist OR attempting to close array scope with object closing token!\n" );
-                return 0;
+                return CJSON_FAILURE;
             }
         }
         else if ( token->type == CJSON_TOKEN_ARRE )
@@ -37,7 +37,7 @@ unsigned int CJSON_verify_scopes( CJSON_TOKEN* tokens, unsigned int num_tokens )
             else
             {
                 CJSON_ERROR( "Trying to close scope that doesn't exist OR attempting to close object scope with an array closing token!\n" );
-                return 0;
+                return CJSON_FAILURE;
             }
         }
     }

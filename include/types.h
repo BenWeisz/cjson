@@ -88,4 +88,8 @@ typedef struct CJSON_PARSE_QUEUE_ELEMENT
 
 #define CJSON_PARSE_SCOPE_CHECKING      0x01
 
+/* Error Types */
+#define CJSON_FAILURE                   0x00
+#define CJSON_SUCCESS                   0x01
+
 #endif // CJSON_TYPES_H
