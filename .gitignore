@@ -1,6 +1,0 @@
-/build
-/debug
-/python
-.DS_STORE
-launch.json
-cjson.h
